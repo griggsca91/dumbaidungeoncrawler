@@ -10,7 +10,7 @@
     "A simple camera object tracks a position and can be used to offset all rendering calls.",
     "The project consists of index.html, a main JS entry point, and a modular file structure (e.g., src/engine/, src/game/) loadable via ES modules or a simple bundler."
   ],
-  "status": "not-started",
+  "status": "done",
   "priority": "critical",
   "estimate": 3,
   "dependencies": [],
@@ -19,5 +19,5 @@
   "source_file": "docs/game-spec.md",
   "notes": "Tech stack override: spec recommended Godot but project will use vanilla JS + Canvas HTML for easy browser launch. 32x32 tile size per spec Appendix A.2.1.",
   "created_at": "2026-03-16T18:00:00Z",
-  "updated_at": null
+  "updated_at": "2026-03-16T19:00:00Z"
 }
