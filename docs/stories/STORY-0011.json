@@ -11,7 +11,7 @@
     "The player can swap equipment via the inventory screen, dropping the previously equipped item on the ground.",
     "At least 15 distinct items exist across the slot types for MVP, defined in a JSON data file."
   ],
-  "status": "not-started",
+  "status": "done",
   "priority": "critical",
   "estimate": 5,
   "dependencies": ["STORY-0002"],
@@ -20,5 +20,5 @@
   "source_file": "docs/game-spec.md",
   "notes": "Spec says '5 slot types, ~50 unique items with stats and degradation' for full MVP. Start with 15 items for the first pass; expand item variety in a content story. Spec uses 5 named types but arms are x2 = 6 slots.",
   "created_at": "2026-03-16T18:00:00Z",
-  "updated_at": null
+  "updated_at": "2026-03-16T20:30:00Z"
 }

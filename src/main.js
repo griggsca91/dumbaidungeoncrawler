@@ -85,6 +85,11 @@ function render() {
   renderer.drawLayer(tileMap, LAYERS.WALLS, state.camera);
   renderer.drawLayer(tileMap, LAYERS.OBJECTS, state.camera);
 
+  // Items on floor
+  for (const entry of state.itemsOnFloor) {
+    drawFloorItem(ctx, entry, offset);
+  }
+
   // Enemies
   for (const e of state.entities) {
     if (e.alive) drawEntity(ctx, e, offset, e.faction === 'mutant' ? '#00b894' : '#e74c3c');
@@ -152,6 +157,17 @@ function drawEntity(ctx, entity, offset, color) {
   drawHpBar(ctx, x, y - 6, TILE_SIZE, entity.hp, entity.maxHp, color);
 }
 
+function drawFloorItem(ctx, entry, offset) {
+  const { x, y } = gridToScreen(entry.x, entry.y, offset);
+  // Small gold square for items on floor
+  const pad = 10;
+  ctx.fillStyle = '#fdcb6e';
+  ctx.fillRect(x + pad, y + pad, TILE_SIZE - pad * 2, TILE_SIZE - pad * 2);
+  ctx.strokeStyle = '#f0a500';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + pad, y + pad, TILE_SIZE - pad * 2, TILE_SIZE - pad * 2);
+}
+
 function drawHpBar(ctx, x, y, width, hp, maxHp, color) {
   const pct = hp / maxHp;
   ctx.fillStyle = '#333';
@@ -200,6 +216,7 @@ function drawHUD(ctx, width, height) {
   ctx.fillStyle = '#f0a500';
   ctx.fillText(`HP: ${p.hp}/${p.maxHp}`, 10, 16);
   ctx.fillText(`${weaponLabel}`, 140, 16);
+  ctx.fillText(`Inv: ${p.inventory.length}/8`, width - 200, 16);
   ctx.fillText(`Turn: ${turn}`, width - 100, 16);
 
   // Row 2: Resource bars

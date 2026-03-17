@@ -7,6 +7,7 @@ import { createCamera } from '../engine/camera.js';
 import { createPlayer } from './player.js';
 import { createEntity } from './entity.js';
 import { createResources } from './resources.js';
+import { getItemById } from './items.js';
 
 /**
  * Create a fresh game state for a new run.
@@ -32,8 +33,16 @@ export function createGameState() {
     /** Player resources: oxygen, power, suitIntegrity. */
     resources: createResources(),
 
-    /** Items lying on the floor { x, y, item } */
-    itemsOnFloor: [],
+    /** Items lying on the floor: array of { x, y, item } */
+    itemsOnFloor: [
+      { x: 3,  y: 5,  item: getItemById('weapon_pistol') },
+      { x: 7,  y: 3,  item: getItemById('weapon_crowbar') },
+      { x: 2,  y: 8,  item: getItemById('suit_light_armor') },
+      { x: 4,  y: 6,  item: getItemById('consumable_o2') },
+      { x: 6,  y: 3,  item: getItemById('consumable_power') },
+      { x: 18, y: 4,  item: getItemById('weapon_rifle') },
+      { x: 20, y: 2,  item: getItemById('legs_sprint') },
+    ],
 
     /** Message log — array of { text, type, turn } */
     messages: [

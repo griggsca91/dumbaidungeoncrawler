@@ -7,6 +7,7 @@ import { createEntity } from './entity.js';
 import { getDirectionFromAction } from '../engine/input.js';
 import { meleeAttack, rangedAttack, getEntityAt, isAdjacentTo, addMessage } from './combat.js';
 import { hasLineOfSight } from './los.js';
+import { pickupItem, getItemsAt } from './equipment.js';
 
 /**
  * Create the player entity.
@@ -89,27 +90,21 @@ export function executePlayerAction(player, action, tileMap, gameState) {
 }
 
 /**
- * Handle item pickup action.
+ * Handle item pickup action — picks up all items at current tile.
  */
 function handlePickup(player, tileMap, gameState) {
-  // Will be wired to equipment system in STORY-0011
-  // For now, check for items on floor layer
-  if (gameState.itemsOnFloor) {
-    const item = gameState.itemsOnFloor.find(i => i.x === player.x && i.y === player.y);
-    if (item) {
-      if (player.inventory.length < 8) {
-        player.inventory.push(item);
-        gameState.itemsOnFloor = gameState.itemsOnFloor.filter(i => i !== item);
-        addMessage(gameState, `You pick up ${item.name}.`, 'system');
-        return true;
-      } else {
-        addMessage(gameState, 'Your inventory is full!', 'system');
-        return false;
-      }
-    }
+  const itemsHere = getItemsAt(player.x, player.y, gameState);
+  if (itemsHere.length === 0) {
+    addMessage(gameState, 'Nothing to pick up here.', 'system');
+    return false;
   }
-  addMessage(gameState, 'Nothing to pick up here.', 'system');
-  return false;
+  // Pick up the first item at this position
+  const entry = itemsHere[0];
+  const picked = pickupItem(player, entry.item, gameState);
+  if (picked) {
+    gameState.itemsOnFloor = gameState.itemsOnFloor.filter(e => e !== entry);
+  }
+  return picked;
 }
 
 /**
