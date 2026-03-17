@@ -24,6 +24,9 @@ const input = createInput();
 const turnManager = createTurnManager();
 const visibility = createVisibility(tileMap.width, tileMap.height);
 
+// Expose tileMap on state so enemy AI can access it
+state.tileMap = tileMap;
+
 // Initial FOV
 visibility.update(state.player.x, state.player.y, state.player.facing,
   (x, y) => tileMap.blocksLight(x, y));
