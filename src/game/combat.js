@@ -9,6 +9,7 @@ import { getCoverModifier, damageDestructible } from './cover.js';
 import { rollLoot } from '../data/enemies.js';
 import { getItemById } from './items.js';
 import { raiseAlert } from './warden.js';
+import { emitMuzzleFlash, emitBulletTrail, emitMeleeSlash, emitDamageFlash } from '../engine/particles.js';
 
 /** Base melee hit chance (no modifiers). */
 const BASE_MELEE_HIT_CHANCE = 0.85;
@@ -75,6 +76,9 @@ export function meleeAttack(attacker, target, gameState) {
   const damage = rollMeleeDamage(attacker);
   applyDamage(target, damage, gameState);
 
+  // Melee slash effect
+  emitMeleeSlash(attacker.x, attacker.y, attacker.facing || 'south');
+
   const killed = !target.alive;
   if (killed) {
     addMessage(gameState, `${attacker.name} kills ${target.name}!`, 'combat-kill');
@@ -122,6 +126,10 @@ export function rangedAttack(attacker, target, coverModifier, gameState) {
     return { hit: false, damage: 0, killed: false, noAmmo: false };
   }
 
+  // Ranged visual feedback
+  emitMuzzleFlash(attacker.x, attacker.y);
+  emitBulletTrail(attacker.x, attacker.y, target.x, target.y);
+
   const damage = rollRangedDamage(weapon);
   applyDamage(target, damage, gameState);
 
@@ -149,6 +157,11 @@ export function applyDamage(entity, damage, gameState) {
   const finalDamage = Math.max(1, damage - armorVal);
 
   entity.hp = Math.max(0, entity.hp - finalDamage);
+
+  // Screen flash when player is hit
+  if (entity === gameState?.player) {
+    emitDamageFlash();
+  }
 
   // Reduce suit integrity when player takes damage
   if (entity === gameState.player && gameState.resources) {

@@ -18,6 +18,7 @@ import { getCoverType } from './game/cover.js';
 import { drawHUD, updateLayout } from './ui/hud.js';
 import { drawInventoryScreen, handleInventoryInput, openInventory } from './ui/inventory.js';
 import { tickWarden, clearAlertCache } from './game/warden.js';
+import { updateParticles, renderParticles } from './engine/particles.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
 
@@ -102,6 +103,7 @@ function regenSector() {
 // ── Update ────────────────────────────────────────────────────────────────
 
 function update(dt) {
+  updateParticles(dt);  // always run, even when paused/gameover
   if (state.phase !== 'playing' || inventoryOpen) return;
   if (!input.hasPendingAction()) return;
 
@@ -166,6 +168,9 @@ function render() {
 
   // Player
   if (state.player.alive) drawPlayer(ctx, state.player, offset);
+
+  // Particles (world-space, behind FOV overlay)
+  renderParticles(ctx, offset);
 
   // FOV overlay
   if (debugFovEnabled) {

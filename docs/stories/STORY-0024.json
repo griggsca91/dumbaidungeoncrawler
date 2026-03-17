@@ -12,7 +12,7 @@
     "Screen-edge damage flash: the canvas border flashes red briefly when the player takes damage.",
     "All effects are non-blocking and play asynchronously over multiple render frames without pausing the turn system."
   ],
-  "status": "not-started",
+  "status": "done",
   "priority": "medium",
   "estimate": 3,
   "dependencies": ["STORY-0003", "STORY-0007"],
@@ -21,5 +21,5 @@
   "source_file": "docs/game-spec.md",
   "notes": "Spec: 'Particle effects for atmosphere (steam, sparks, floating debris in zero-g).' Use simple Canvas arc/fillRect calls with alpha fade — no sprite dependencies. A small particle system class manages active particles.",
   "created_at": "2026-03-16T18:00:00Z",
-  "updated_at": null
+  "updated_at": "2026-03-17T01:00:00Z"
 }
