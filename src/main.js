@@ -19,6 +19,8 @@ import { drawHUD, updateLayout } from './ui/hud.js';
 import { drawInventoryScreen, handleInventoryInput, openInventory } from './ui/inventory.js';
 import { tickWarden, clearAlertCache } from './game/warden.js';
 import { updateParticles, renderParticles } from './engine/particles.js';
+import { handleDeath, startNewRun, loadStash, isAtStashZone } from './game/runManager.js';
+import { drawStashScreen, handleStashInput, openStash } from './ui/stash.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
 
@@ -29,6 +31,9 @@ const state = createGameState();
 const renderer = createRenderer(ctx);
 const input = createInput();
 const turnManager = createTurnManager();
+
+// Load stash from previous run
+state.stash = loadStash();
 
 // Generate the starting sector (Docking Ring)
 const tileMap = generateSector(state, 'docking');
@@ -49,6 +54,7 @@ visibility.update(state.player.x, state.player.y, state.player.facing,
 
 let debugFovEnabled = true;
 let inventoryOpen = false;
+let stashOpen = false;
 
 // ── Key handling ──────────────────────────────────────────────────────────
 
@@ -66,9 +72,36 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
+  // Stash screen
+  if (stashOpen) {
+    if (e.key === 'b' || e.key === 'B' || e.key === 'Escape') {
+      stashOpen = false;
+      e.preventDefault();
+      return;
+    }
+    if (handleStashInput(e.key, state)) e.preventDefault();
+    return;
+  }
+
+  // Game-over screen — N to start new run
+  if (state.phase === 'gameover') {
+    if (e.key === 'n' || e.key === 'N' || e.key === 'Enter') {
+      startNewRun(state, visibility, turnManager);
+      e.preventDefault();
+    }
+    return;
+  }
+
   if (e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
     inventoryOpen = true;
     openInventory();
+    e.preventDefault();
+    return;
+  }
+  // Open stash when at stash zone
+  if ((e.key === 'b' || e.key === 'B') && isAtStashZone(state)) {
+    stashOpen = true;
+    openStash();
     e.preventDefault();
     return;
   }
@@ -126,10 +159,8 @@ function update(dt) {
   if (consumed) {
     state.turn = turnManager.getTurnCount();
 
-    if (state.player.hp <= 0) {
-      state.player.alive = false;
-      state.phase = 'gameover';
-      state.messages.push({ text: 'YOU DIED. Press R to generate a new sector.', type: 'combat-kill', turn: state.turn });
+    if (state.player.hp <= 0 && state.phase !== 'gameover') {
+      handleDeath(state);
     }
 
     state.camera.x = state.player.x;
@@ -185,6 +216,28 @@ function render() {
   if (inventoryOpen) {
     drawInventoryScreen(ctx, state);
   }
+
+  // Stash overlay
+  if (stashOpen) {
+    drawStashScreen(ctx, state);
+  }
+
+  // Stash zone hint
+  if (!stashOpen && !inventoryOpen && state.phase === 'playing' && isAtStashZone(state)) {
+    drawStashHint(ctx, width, height);
+  }
+}
+
+function drawStashHint(ctx, width, height) {
+  const msg = 'AIRLOCK STASH nearby — press B to access';
+  ctx.font = '12px monospace';
+  const tw = ctx.measureText(msg).width;
+  const bx = Math.floor((width - tw) / 2) - 10;
+  const by = height - 110;
+  ctx.fillStyle = 'rgba(0,0,0,0.8)';
+  ctx.fillRect(bx, by, tw + 20, 22);
+  ctx.fillStyle = '#f0a500';
+  ctx.fillText(msg, bx + 10, by + 15);
 }
 
 // ── Draw helpers ──────────────────────────────────────────────────────────

@@ -405,21 +405,38 @@ function drawMessageLog(ctx, state, width, height) {
 // ── Game over overlay ────────────────────────────────────────────────────────
 
 function drawGameOver(ctx, state, turnManager, width, height) {
-  ctx.fillStyle = 'rgba(0,0,0,0.75)';
+  ctx.fillStyle = 'rgba(0,0,0,0.82)';
   ctx.fillRect(0, 0, width, height);
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#e74c3c';
   ctx.font = 'bold 52px monospace';
-  ctx.fillText('YOU DIED', width / 2, height / 2 - 20);
+  ctx.fillText('YOU DIED', width / 2, height / 2 - 50);
 
+  const summary = state.runSummary || { turns: state.turn, kills: state.stats?.kills || 0, sector: state.sectorType };
   ctx.fillStyle = '#b2bec3';
-  ctx.font = '18px monospace';
+  ctx.font = '16px monospace';
   ctx.fillText(
-    `Turns: ${state.turn}   Kills: ${state.stats?.kills || 0}`,
-    width / 2, height / 2 + 24
+    `Sector: ${summary.sector}   Turns: ${summary.turns}   Kills: ${summary.kills}`,
+    width / 2, height / 2
   );
-  ctx.fillText('Press R to generate a new sector', width / 2, height / 2 + 54);
+
+  // New run button area
+  const btnW = 260, btnH = 44;
+  const btnX = width / 2 - btnW / 2;
+  const btnY = height / 2 + 30;
+  ctx.fillStyle = '#1a2744';
+  ctx.fillRect(btnX, btnY, btnW, btnH);
+  ctx.strokeStyle = '#74b9ff';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(btnX, btnY, btnW, btnH);
+  ctx.fillStyle = '#74b9ff';
+  ctx.font = 'bold 16px monospace';
+  ctx.fillText('[ N ] START NEW RUN', width / 2, btnY + 29);
+
+  ctx.fillStyle = '#4a4e69';
+  ctx.font = '12px monospace';
+  ctx.fillText('Stash items persist. Equipped gear is lost.', width / 2, btnY + 70);
   ctx.textAlign = 'left';
 }
 
