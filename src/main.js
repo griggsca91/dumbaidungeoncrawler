@@ -16,6 +16,7 @@ import { executePlayerAction } from './game/player.js';
 import { tickResources } from './game/resources.js';
 import { getCoverType } from './game/cover.js';
 import { drawHUD, updateLayout } from './ui/hud.js';
+import { tickWarden, clearAlertCache } from './game/warden.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
 
@@ -93,10 +94,12 @@ function update(dt) {
     (act) => executePlayerAction(state.player, act, state.tileMap, state),
     () => {
       state.turn = turnManager.getTurnCount();
+      clearAlertCache();
       tickResources(state.resources, state.player, state);
       for (const e of state.entities) {
         if (e.alive) e.act(state);
       }
+      tickWarden(state);
     }
   );
 

@@ -8,6 +8,7 @@ import { hasLineOfSight } from './los.js';
 import { getCoverModifier, damageDestructible } from './cover.js';
 import { rollLoot } from '../data/enemies.js';
 import { getItemById } from './items.js';
+import { raiseAlert } from './warden.js';
 
 /** Base melee hit chance (no modifiers). */
 const BASE_MELEE_HIT_CHANCE = 0.85;
@@ -60,6 +61,11 @@ export function calculateHitChance(attacker, target, isMelee, coverModifier = 0)
 export function meleeAttack(attacker, target, gameState) {
   const hitChance = calculateHitChance(attacker, target, true, 0);
   const hit = Math.random() < hitChance;
+
+  // Raise alert when player is involved in combat (once per turn)
+  if (gameState && (attacker === gameState.player || target === gameState.player)) {
+    raiseAlert(gameState, 1, 'combat');
+  }
 
   if (!hit) {
     addMessage(gameState, `${attacker.name} swings at ${target.name}... and misses!`, 'combat');
