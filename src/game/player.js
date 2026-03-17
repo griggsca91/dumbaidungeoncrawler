@@ -8,6 +8,7 @@ import { getDirectionFromAction } from '../engine/input.js';
 import { meleeAttack, rangedAttack, getEntityAt, isAdjacentTo, addMessage } from './combat.js';
 import { hasLineOfSight } from './los.js';
 import { pickupItem, getItemsAt } from './equipment.js';
+import { interactAdjacent, getDoorState, openDoor } from './doors.js';
 
 /**
  * Create the player entity.
@@ -79,7 +80,22 @@ export function executePlayerAction(player, action, tileMap, gameState) {
     return true; // Attack consumes turn even if it misses
   }
 
-  // Movement
+  // Check if target is a closed door — auto-open it
+  const doorState = getDoorState(newX, newY, tileMap);
+  if (doorState === 'closed') {
+    openDoor(newX, newY, tileMap);
+    addMessage(gameState, 'You open the door.', 'system');
+    // Move through in the same turn
+    player.x = newX;
+    player.y = newY;
+    return true;
+  }
+  if (doorState === 'locked') {
+    addMessage(gameState, 'Locked. Use E near this door with a hacking rig equipped.', 'system');
+    return false; // Blocked, no turn
+  }
+
+  // General walkability check
   if (!tileMap.isWalkable(newX, newY)) {
     return false; // Blocked — no turn consumed
   }
@@ -108,12 +124,10 @@ function handlePickup(player, tileMap, gameState) {
 }
 
 /**
- * Handle interact action (terminals, doors, etc.).
+ * Handle interact action — delegates to doors.js adjacency check.
  */
 function handleInteract(player, tileMap, gameState) {
-  // Will be expanded in STORY-0013 (doors/hacking)
-  addMessage(gameState, 'Nothing to interact with here.', 'system');
-  return false;
+  return interactAdjacent(player, tileMap, gameState);
 }
 
 /**
