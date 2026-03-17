@@ -16,19 +16,30 @@ export function createEntity(x, y, facing = 'south', options = {}) {
     x,
     y,
     facing,
-    hp: options.hp || 10,
-    maxHp: options.maxHp || options.hp || 10,
+    hp: options.hp ?? 10,
+    maxHp: options.maxHp ?? options.hp ?? 10,
     name: options.name || 'entity',
     tileId: options.tileId || 40,
+    faction: options.faction || 'neutral',
     alive: true,
+
+    // Equipment slots (null until equipped)
+    equipment: {
+      head: null,
+      torso: null,
+      armLeft: options.weapon || null,  // enemies start with a built-in weapon
+      armRight: null,
+      back: null,
+      legs: null,
+    },
 
     /**
      * Process this entity's turn.
-     * Override for specific behavior.
+     * Override per entity type.
      * @param {object} gameState - The game state.
      */
     act(gameState) {
-      // Base entities do nothing. Subclasses override.
+      // Base entities do nothing. Enemy types override this.
     },
   };
 }

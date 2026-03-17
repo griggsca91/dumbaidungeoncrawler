@@ -108,6 +108,8 @@ function mapKeyToAction(key) {
     case 'ArrowRight': case 'd': case 'D': return 'move_east';
     case 'ArrowLeft':  case 'a': case 'A': return 'move_west';
     case ' ':                              return 'wait';
+    case 'g': case 'G':                   return 'pickup';
+    case 'e': case 'E':                   return 'interact';
     default: return null;
   }
 }

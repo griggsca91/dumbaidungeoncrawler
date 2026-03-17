@@ -1,6 +1,5 @@
 /**
  * Main entry point for Derelict Protocol.
- * Initializes the canvas, creates game state, and starts the game loop.
  */
 
 import { initCanvas, getCtx, getCanvasSize } from './engine/canvas.js';
@@ -24,72 +23,50 @@ const input = createInput();
 const turnManager = createTurnManager();
 const visibility = createVisibility(tileMap.width, tileMap.height);
 
-// Initial FOV calculation
-visibility.update(
-  state.player.x, state.player.y, state.player.facing,
-  (x, y) => tileMap.blocksLight(x, y)
-);
+// Initial FOV
+visibility.update(state.player.x, state.player.y, state.player.facing,
+  (x, y) => tileMap.blocksLight(x, y));
 
-/** Debug: which single layer to show, or -1 for all. */
-let debugSoloLayer = -1;
-/** Debug: toggle FOV overlay. */
 let debugFovEnabled = true;
 
-// --- Debug key handling ---
+// --- Debug toggles ---
 window.addEventListener('keydown', (e) => {
-  if (e.key === '`' || e.key === '~') {
-    debugSoloLayer++;
-    if (debugSoloLayer > LAYERS.UI) {
-      debugSoloLayer = -1;
-      for (let i = 0; i <= LAYERS.UI; i++) {
-        if (!renderer.isLayerVisible(i)) renderer.toggleLayer(i);
-      }
-    } else {
-      for (let i = 0; i <= LAYERS.UI; i++) {
-        const shouldBeVisible = (i === debugSoloLayer);
-        if (renderer.isLayerVisible(i) !== shouldBeVisible) {
-          renderer.toggleLayer(i);
-        }
-      }
-    }
-  }
-  // Toggle FOV with 'f' key
-  if (e.key === 'f' || e.key === 'F') {
-    debugFovEnabled = !debugFovEnabled;
-  }
+  if (e.key === 'f' || e.key === 'F') debugFovEnabled = !debugFovEnabled;
 });
 
 // --- Update ---
 function update(dt) {
   if (state.phase !== 'playing') return;
+  if (!input.hasPendingAction()) return;
 
-  // Process pending input as a turn action
-  if (input.hasPendingAction()) {
-    const action = input.consumeAction();
+  const action = input.consumeAction();
 
-    turnManager.processAction(
-      action,
-      // Execute player action
-      (act) => executePlayerAction(state.player, act, tileMap),
-      // Execute entity turns
-      () => {
-        for (const entity of state.entities) {
-          if (entity.alive) {
-            entity.act(state);
-          }
-        }
+  const consumed = turnManager.processAction(
+    action,
+    (act) => executePlayerAction(state.player, act, tileMap, state),
+    () => {
+      state.turn = turnManager.getTurnCount();
+      for (const e of state.entities) {
+        if (e.alive) e.act(state);
       }
-    );
+      // Remove dead entities from the map (they stay in array marked alive=false)
+    }
+  );
 
-    // Camera follows player
+  if (consumed) {
+    state.turn = turnManager.getTurnCount();
+
+    // Check player death
+    if (state.player.hp <= 0) {
+      state.player.alive = false;
+      state.phase = 'gameover';
+      state.messages.push({ text: 'YOU DIED. Reload to play again.', type: 'combat-kill', turn: state.turn });
+    }
+
     state.camera.x = state.player.x;
     state.camera.y = state.player.y;
-
-    // Recalculate FOV after player acts
-    visibility.update(
-      state.player.x, state.player.y, state.player.facing,
-      (x, y) => tileMap.blocksLight(x, y)
-    );
+    visibility.update(state.player.x, state.player.y, state.player.facing,
+      (x, y) => tileMap.blocksLight(x, y));
   }
 }
 
@@ -98,48 +75,45 @@ function render() {
   const { width, height } = getCanvasSize();
   const offset = getCameraOffset(state.camera);
 
-  // Clear screen
   ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, width, height);
 
-  // Draw tile map layers
+  // Tile layers
   renderer.drawLayer(tileMap, LAYERS.FLOOR, state.camera);
   renderer.drawLayer(tileMap, LAYERS.WALLS, state.camera);
   renderer.drawLayer(tileMap, LAYERS.OBJECTS, state.camera);
 
-  // Draw player on the entity layer
-  if (renderer.isLayerVisible(LAYERS.ENTITIES)) {
-    drawPlayer(ctx, state.player, offset);
+  // Enemies
+  for (const e of state.entities) {
+    if (e.alive) drawEntity(ctx, e, offset, e.faction === 'mutant' ? '#00b894' : '#e74c3c');
   }
 
-  // Draw FOV darkness overlay
+  // Player
+  if (state.player.alive) drawPlayer(ctx, state.player, offset);
+
+  // FOV overlay
   if (debugFovEnabled) {
     visibility.renderOutOfBoundsDarkness(ctx, state.camera);
     visibility.renderOverlay(ctx, state.camera);
   }
 
-  // Debug HUD (always on top)
-  drawDebugHUD(ctx, width);
+  // HUD
+  drawHUD(ctx, width, height);
 }
 
-/**
- * Draw the player entity as a directional arrow.
- */
+// --- Draw helpers ---
+
 function drawPlayer(ctx, player, offset) {
   const { x, y } = gridToScreen(player.x, player.y, offset);
   const cx = x + TILE_SIZE / 2;
   const cy = y + TILE_SIZE / 2;
   const size = TILE_SIZE * 0.35;
-
-  // Rotation based on facing
   const angles = { north: -Math.PI / 2, south: Math.PI / 2, east: 0, west: Math.PI };
   const angle = angles[player.facing] || 0;
 
   ctx.save();
   ctx.translate(cx, cy);
   ctx.rotate(angle);
-
-  // Draw arrow/triangle
   ctx.fillStyle = '#74b9ff';
   ctx.beginPath();
   ctx.moveTo(size, 0);
@@ -148,48 +122,97 @@ function drawPlayer(ctx, player, offset) {
   ctx.lineTo(-size, size * 0.7);
   ctx.closePath();
   ctx.fill();
-
-  // Center dot
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#fff';
   ctx.beginPath();
   ctx.arc(0, 0, 2, 0, Math.PI * 2);
   ctx.fill();
-
   ctx.restore();
+
+  // HP bar above player
+  drawHpBar(ctx, x, y - 6, TILE_SIZE, player.hp, player.maxHp, '#74b9ff');
 }
 
-/**
- * Draw debug information.
- */
-function drawDebugHUD(ctx, width) {
+function drawEntity(ctx, entity, offset, color) {
+  const { x, y } = gridToScreen(entity.x, entity.y, offset);
+  const half = TILE_SIZE / 2;
+
+  // Diamond shape for enemies
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x + half, y + 4);
+  ctx.lineTo(x + TILE_SIZE - 4, y + half);
+  ctx.lineTo(x + half, y + TILE_SIZE - 4);
+  ctx.lineTo(x + 4, y + half);
+  ctx.closePath();
+  ctx.fill();
+
+  // HP bar
+  drawHpBar(ctx, x, y - 6, TILE_SIZE, entity.hp, entity.maxHp, color);
+}
+
+function drawHpBar(ctx, x, y, width, hp, maxHp, color) {
+  const pct = hp / maxHp;
+  ctx.fillStyle = '#333';
+  ctx.fillRect(x, y, width, 4);
+  ctx.fillStyle = pct > 0.5 ? '#2ecc71' : pct > 0.25 ? '#f39c12' : '#e74c3c';
+  ctx.fillRect(x, y, Math.floor(width * pct), 4);
+}
+
+function drawHUD(ctx, width, height) {
   const p = state.player;
   const turn = turnManager.getTurnCount();
+  const LOG_LINES = 5;
+  const LOG_H = LOG_LINES * 16 + 8;
+  const LOG_Y = height - LOG_H;
 
-  ctx.fillStyle = '#f0a500';
+  // ── Message log ──
+  ctx.fillStyle = 'rgba(0,0,0,0.8)';
+  ctx.fillRect(0, LOG_Y, width, LOG_H);
+
+  const recent = state.messages.slice(-LOG_LINES);
+  const typeColors = {
+    'combat':       '#f39c12',
+    'combat-kill':  '#e74c3c',
+    'system':       '#b2bec3',
+    'lore':         '#fdcb6e',
+  };
   ctx.font = '12px monospace';
-
-  const lines = [
-    `Turn: ${turn}`,
-    `Pos: ${p.x}, ${p.y}  Facing: ${p.facing}`,
-    `WASD: move | Space: wait | F: toggle FOV`,
-  ];
-
-  // Background for readability
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.fillRect(4, 2, 320, lines.length * 16 + 6);
-
-  ctx.fillStyle = '#f0a500';
-  lines.forEach((line, i) => {
-    ctx.fillText(line, 10, 18 + i * 16);
+  recent.forEach((msg, i) => {
+    ctx.fillStyle = typeColors[msg.type] || '#dfe6e9';
+    ctx.fillText(msg.text, 10, LOG_Y + 16 + i * 16);
   });
 
-  if (debugSoloLayer >= 0) {
-    ctx.fillText(`Layer: ${renderer.getLayerName(debugSoloLayer)}`, 10, 18 + lines.length * 16);
-  }
+  // ── Player stats bar ──
+  const STAT_H = 28;
+  ctx.fillStyle = 'rgba(0,0,0,0.85)';
+  ctx.fillRect(0, 0, width, STAT_H);
 
-  if (!debugFovEnabled) {
+  ctx.font = '12px monospace';
+  const weapon = p.equipment?.armLeft || p.equipment?.armRight;
+  const weaponLabel = weapon ? `${weapon.name} (${weapon.type === 'ranged' ? weapon.ammo + ' ammo' : 'melee'})` : 'Unarmed';
+  const stats = [
+    `HP: ${p.hp}/${p.maxHp}`,
+    `Turn: ${turn}`,
+    `Weapon: ${weaponLabel}`,
+    `F: FOV ${debugFovEnabled ? 'ON' : 'OFF'}`,
+  ];
+  stats.forEach((s, i) => {
+    ctx.fillStyle = '#f0a500';
+    ctx.fillText(s, 10 + i * 220, 18);
+  });
+
+  // ── Game over overlay ──
+  if (state.phase === 'gameover') {
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = '#e74c3c';
-    ctx.fillText('FOV: OFF', 240, 18);
+    ctx.font = 'bold 48px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('YOU DIED', width / 2, height / 2);
+    ctx.fillStyle = '#b2bec3';
+    ctx.font = '20px monospace';
+    ctx.fillText('Reload to try again.', width / 2, height / 2 + 44);
+    ctx.textAlign = 'left';
   }
 }
 
