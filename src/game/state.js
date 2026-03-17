@@ -1,73 +1,66 @@
 /**
  * Game state container.
  * Central place for all runtime game data.
+ * Enemies, items, and map are populated by the procedural generator.
  */
 
 import { createCamera } from '../engine/camera.js';
 import { createPlayer } from './player.js';
 import { createResources } from './resources.js';
-import { getItemById } from './items.js';
-import { createBot, createMutant } from './enemy.js';
 
 /**
- * Create a fresh game state for a new run.
- * @returns {object} The initial game state.
+ * Create a fresh game state shell for a new run.
+ * The tileMap and entity/item lists are filled in by generateSector()
+ * which is called from main.js immediately after.
+ * @returns {object} Partially-populated game state.
  */
 export function createGameState() {
-  const player = createPlayer(4, 4);
-
-  // Place test enemies (will be replaced by proc-gen in STORY-0006)
-  const enemies = [
-    createBot(10, 3, 'drone'),
-    createBot(18, 2, 'bot'),
-    createMutant(5, 12, 'shambler'),
-    createMutant(14, 14, 'runner'),
-  ];
+  const player = createPlayer(4, 4);  // position will be overridden by proc-gen
 
   return {
     /** The player entity. */
     player,
 
-    /** All non-player entities (enemies, NPCs). */
-    entities: enemies,
+    /** All non-player entities (enemies, NPCs). Populated by proc-gen. */
+    entities: [],
 
     /** Player resources: oxygen, power, suitIntegrity. */
     resources: createResources(),
 
-    /** Items lying on the floor: array of { x, y, item } */
-    itemsOnFloor: [
-      { x: 3,  y: 5,  item: getItemById('weapon_pistol') },
-      { x: 7,  y: 3,  item: getItemById('weapon_crowbar') },
-      { x: 2,  y: 8,  item: getItemById('suit_light_armor') },
-      { x: 4,  y: 6,  item: getItemById('consumable_o2') },
-      { x: 6,  y: 3,  item: getItemById('consumable_power') },
-      { x: 18, y: 4,  item: getItemById('weapon_rifle') },
-      { x: 20, y: 2,  item: getItemById('legs_sprint') },
-    ],
+    /** Items lying on the floor. Populated by proc-gen. */
+    itemsOnFloor: [],
 
     /** Message log — array of { text, type, turn } */
     messages: [
       { text: 'Station Kharon-7. Something is very wrong here.', type: 'lore', turn: 0 },
-      { text: 'WASD: move | G: pickup | E: interact | Space: wait', type: 'system', turn: 0 },
+      { text: 'WASD: move  G: pickup  E: interact  Space: wait  I: inventory', type: 'system', turn: 0 },
     ],
 
     /** Destructible object HP map: "x,y" -> { hp, maxHp } */
     destructibleState: {},
 
+    /** Room metadata array. Populated by proc-gen. */
+    rooms: [],
+
+    /** Current sector type. Set by proc-gen. */
+    sectorType: 'docking',
+
+    /** Warden alert level 0-5. */
+    alertLevel: 0,
+
+    /** Run stats. */
+    stats: { kills: 0, itemsFound: 0 },
+
     /** Current turn count. */
     turn: 0,
 
     /** Camera position in grid coords (follows player). */
-    camera: createCamera(player.x, player.y),
+    camera: createCamera(4, 4),
 
     /** Game phase: 'playing', 'paused', 'gameover'. */
     phase: 'playing',
 
-    /** Debug flags. */
-    debug: {
-      showGrid: false,
-    },
+    /** Airlock stash (persists across runs). Populated from localStorage. */
+    stash: [],
   };
 }
-
-
