@@ -22,6 +22,7 @@ import { updateParticles, renderParticles } from './engine/particles.js';
 import { handleDeath, startNewRun, loadStash, isAtStashZone } from './game/runManager.js';
 import { drawStashScreen, handleStashInput, openStash } from './ui/stash.js';
 import { saveGame, deleteSave } from './infra/saveLoad.js';
+import { drawMapView, handleMapInput, openMapView } from './ui/mapView.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
 
@@ -56,10 +57,22 @@ visibility.update(state.player.x, state.player.y, state.player.facing,
 let debugFovEnabled = true;
 let inventoryOpen = false;
 let stashOpen = false;
+let mapOpen = false;
 
 // ── Key handling ──────────────────────────────────────────────────────────
 
 window.addEventListener('keydown', (e) => {
+  // Map overlay
+  if (mapOpen) {
+    if (e.key === 'Escape' || e.key === 'm' || e.key === 'M') {
+      mapOpen = false;
+      e.preventDefault();
+      return;
+    }
+    if (handleMapInput(e.key, state)) e.preventDefault();
+    return;
+  }
+
   // Inventory overlay — intercept keys before anything else
   if (inventoryOpen) {
     if (e.key === 'Escape' || e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
@@ -93,6 +106,12 @@ window.addEventListener('keydown', (e) => {
     return;
   }
 
+  if (e.key === 'm' || e.key === 'M') {
+    mapOpen = !mapOpen;
+    if (mapOpen) openMapView();
+    e.preventDefault();
+    return;
+  }
   if (e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
     inventoryOpen = true;
     openInventory();
@@ -138,7 +157,7 @@ function regenSector() {
 
 function update(dt) {
   updateParticles(dt);  // always run, even when paused/gameover
-  if (state.phase !== 'playing' || inventoryOpen) return;
+  if (state.phase !== 'playing' || inventoryOpen || mapOpen || stashOpen) return;
   if (!input.hasPendingAction()) return;
 
   const action = input.consumeAction();
@@ -225,6 +244,11 @@ function render() {
   // Stash overlay
   if (stashOpen) {
     drawStashScreen(ctx, state);
+  }
+
+  // Map overlay
+  if (mapOpen) {
+    drawMapView(ctx, state, visibility);
   }
 
   // Stash zone hint

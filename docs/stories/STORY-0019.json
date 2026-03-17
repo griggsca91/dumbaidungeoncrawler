@@ -10,7 +10,7 @@
     "At sector junction points (specific door tiles), the player can choose which sector to enter next from available options.",
     "The sector selection screen shows sector name, difficulty indicator, and hazard info (if Scanner Array is repaired)."
   ],
-  "status": "not-started",
+  "status": "done",
   "priority": "medium",
   "estimate": 3,
   "dependencies": ["STORY-0006", "STORY-0017"],
@@ -19,5 +19,5 @@
   "source_file": "docs/game-spec.md",
   "notes": "Spec: 'Full-screen map mode with annotations. Sector overview shows known room connections, power grid status, atmosphere warnings.' Map data already tracked by the explored-tiles array from FOV story.",
   "created_at": "2026-03-16T18:00:00Z",
-  "updated_at": null
+  "updated_at": "2026-03-17T02:10:00Z"
 }
