@@ -11,7 +11,7 @@
     "The minimap updates as the player explores new rooms.",
     "A message log at the bottom displays the last 4-5 game messages, color-coded by type (combat = red, lore = gold, system = white)."
   ],
-  "status": "not-started",
+  "status": "done",
   "priority": "critical",
   "estimate": 5,
   "dependencies": ["STORY-0003", "STORY-0010", "STORY-0011"],
@@ -20,5 +20,5 @@
   "source_file": "docs/game-spec.md",
   "notes": "Spec provides an ASCII wireframe of the target layout. All UI rendered via Canvas — no HTML overlays. Consider a UI canvas layer separate from the game canvas for performance.",
   "created_at": "2026-03-16T18:00:00Z",
-  "updated_at": null
+  "updated_at": "2026-03-16T23:15:00Z"
 }

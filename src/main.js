@@ -13,12 +13,15 @@ import { createVisibility } from './engine/visibility.js';
 import { generateSector } from './engine/procgen.js';
 import { createGameState } from './game/state.js';
 import { executePlayerAction } from './game/player.js';
-import { tickResources, getResourceColor } from './game/resources.js';
+import { tickResources } from './game/resources.js';
 import { getCoverType } from './game/cover.js';
+import { drawHUD, updateLayout } from './ui/hud.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
 
 const { canvas, ctx } = initCanvas('game');
+updateLayout();
+window.addEventListener('resize', updateLayout);
 const state = createGameState();
 const renderer = createRenderer(ctx);
 const input = createInput();
@@ -149,8 +152,8 @@ function render() {
     visibility.renderOverlay(ctx, state.camera);
   }
 
-  // HUD
-  drawHUD(ctx, width, height);
+  // HUD panels (left, right, message log, overlays)
+  drawHUD(ctx, state, turnManager);
 }
 
 // ── Draw helpers ──────────────────────────────────────────────────────────
@@ -225,81 +228,7 @@ function drawHpBar(ctx, x, y, width, hp, maxHp, color) {
   ctx.fillRect(x, y, Math.floor(width * pct), 4);
 }
 
-function drawHUD(ctx, width, height) {
-  const p = state.player;
-  const turn = turnManager.getTurnCount();
-  const LOG_LINES = 5;
-  const LOG_H = LOG_LINES * 16 + 8;
-  const LOG_Y = height - LOG_H;
-
-  // Message log
-  ctx.fillStyle = 'rgba(0,0,0,0.82)';
-  ctx.fillRect(0, LOG_Y, width, LOG_H);
-  const typeColors = { combat: '#f39c12', 'combat-kill': '#e74c3c', system: '#b2bec3', lore: '#fdcb6e' };
-  ctx.font = '12px monospace';
-  state.messages.slice(-LOG_LINES).forEach((msg, i) => {
-    ctx.fillStyle = typeColors[msg.type] || '#dfe6e9';
-    ctx.fillText(msg.text, 10, LOG_Y + 16 + i * 16);
-  });
-
-  // Top stats bar
-  const STAT_H = 44;
-  ctx.fillStyle = 'rgba(0,0,0,0.85)';
-  ctx.fillRect(0, 0, width, STAT_H);
-
-  const res = state.resources;
-  const weapon = p.equipment?.armLeft || p.equipment?.armRight;
-  const weaponLabel = weapon
-    ? `${weapon.name} [${weapon.type === 'ranged' ? weapon.ammo + ' ammo' : 'melee'}]`
-    : 'Unarmed';
-
-  ctx.font = '12px monospace';
-  ctx.fillStyle = '#f0a500';
-  ctx.fillText(`HP: ${p.hp}/${p.maxHp}`, 10, 16);
-  ctx.fillText(weaponLabel, 140, 16);
-  ctx.fillText(`Inv: ${p.inventory.length}/8`, width - 220, 16);
-  ctx.fillText(`Alert: ${state.alertLevel}`, width - 140, 16);
-  ctx.fillText(`Turn: ${turn}`, width - 70, 16);
-
-  // Resource bars
-  const barW = 90, barH = 8, barY = 28;
-  [
-    { label: 'O2',   value: res.oxygen,        x: 10  },
-    { label: 'PWR',  value: res.power,          x: 155 },
-    { label: 'SUIT', value: res.suitIntegrity,  x: 300 },
-  ].forEach(r => {
-    ctx.font = '10px monospace';
-    ctx.fillStyle = '#4a4e69';
-    ctx.fillText(r.label, r.x, barY + barH);
-    const bx = r.x + 34;
-    ctx.fillStyle = '#222';
-    ctx.fillRect(bx, barY, barW, barH);
-    ctx.fillStyle = getResourceColor(r.value, 100);
-    ctx.fillRect(bx, barY, Math.floor(barW * r.value / 100), barH);
-    ctx.fillStyle = '#dfe6e9';
-    ctx.fillText(`${r.value}`, bx + barW + 3, barY + barH);
-  });
-
-  // Sector label
-  ctx.fillStyle = '#636e72';
-  ctx.font = '10px monospace';
-  ctx.fillText(`Sector: ${state.sectorType} | R: regen`, 450, 16);
-
-  // Game over overlay
-  if (state.phase === 'gameover') {
-    ctx.fillStyle = 'rgba(0,0,0,0.72)';
-    ctx.fillRect(0, 0, width, height);
-    ctx.fillStyle = '#e74c3c';
-    ctx.font = 'bold 48px monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('YOU DIED', width / 2, height / 2);
-    ctx.fillStyle = '#b2bec3';
-    ctx.font = '18px monospace';
-    ctx.fillText(`Turns: ${state.turn}  Kills: ${state.stats.kills}`, width / 2, height / 2 + 40);
-    ctx.fillText('Press R to generate a new sector', width / 2, height / 2 + 70);
-    ctx.textAlign = 'left';
-  }
-}
+// (HUD rendering delegated to src/ui/hud.js)
 
 // ── Start ─────────────────────────────────────────────────────────────────
 
