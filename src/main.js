@@ -16,6 +16,7 @@ import { executePlayerAction } from './game/player.js';
 import { tickResources } from './game/resources.js';
 import { getCoverType } from './game/cover.js';
 import { drawHUD, updateLayout } from './ui/hud.js';
+import { drawInventoryScreen, handleInventoryInput, openInventory } from './ui/inventory.js';
 import { tickWarden, clearAlertCache } from './game/warden.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
@@ -46,15 +47,32 @@ visibility.update(state.player.x, state.player.y, state.player.facing,
   (x, y) => tileMap.blocksLight(x, y));
 
 let debugFovEnabled = true;
+let inventoryOpen = false;
 
-// ── Debug toggles ─────────────────────────────────────────────────────────
+// ── Key handling ──────────────────────────────────────────────────────────
 
 window.addEventListener('keydown', (e) => {
-  if (e.key === 'f' || e.key === 'F') debugFovEnabled = !debugFovEnabled;
-  // Regenerate map with R (dev tool)
-  if (e.key === 'r' || e.key === 'R') {
-    regenSector();
+  // Inventory overlay — intercept keys before anything else
+  if (inventoryOpen) {
+    if (e.key === 'Escape' || e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
+      inventoryOpen = false;
+      e.preventDefault();
+      return;
+    }
+    if (handleInventoryInput(e.key, state)) {
+      e.preventDefault();
+    }
+    return;
   }
+
+  if (e.key === 'i' || e.key === 'I' || e.key === 'Tab') {
+    inventoryOpen = true;
+    openInventory();
+    e.preventDefault();
+    return;
+  }
+  if (e.key === 'f' || e.key === 'F') debugFovEnabled = !debugFovEnabled;
+  if (e.key === 'r' || e.key === 'R') regenSector();
 });
 
 function regenSector() {
@@ -84,7 +102,7 @@ function regenSector() {
 // ── Update ────────────────────────────────────────────────────────────────
 
 function update(dt) {
-  if (state.phase !== 'playing') return;
+  if (state.phase !== 'playing' || inventoryOpen) return;
   if (!input.hasPendingAction()) return;
 
   const action = input.consumeAction();
@@ -157,6 +175,11 @@ function render() {
 
   // HUD panels (left, right, message log, overlays)
   drawHUD(ctx, state, turnManager);
+
+  // Inventory overlay (pauses game)
+  if (inventoryOpen) {
+    drawInventoryScreen(ctx, state);
+  }
 }
 
 // ── Draw helpers ──────────────────────────────────────────────────────────
