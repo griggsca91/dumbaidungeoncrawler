@@ -6,6 +6,7 @@
 import { createCamera } from '../engine/camera.js';
 import { createPlayer } from './player.js';
 import { createEntity } from './entity.js';
+import { createResources } from './resources.js';
 
 /**
  * Create a fresh game state for a new run.
@@ -27,6 +28,9 @@ export function createGameState() {
 
     /** All non-player entities (enemies, NPCs). */
     entities: enemies,
+
+    /** Player resources: oxygen, power, suitIntegrity. */
+    resources: createResources(),
 
     /** Items lying on the floor { x, y, item } */
     itemsOnFloor: [],

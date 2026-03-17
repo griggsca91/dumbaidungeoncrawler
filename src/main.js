@@ -13,6 +13,7 @@ import { createTurnManager } from './engine/turnManager.js';
 import { createVisibility } from './engine/visibility.js';
 import { createGameState } from './game/state.js';
 import { executePlayerAction } from './game/player.js';
+import { tickResources, getResourceColor } from './game/resources.js';
 
 // --- Initialize ---
 const { canvas, ctx } = initCanvas('game');
@@ -46,10 +47,11 @@ function update(dt) {
     (act) => executePlayerAction(state.player, act, tileMap, state),
     () => {
       state.turn = turnManager.getTurnCount();
+      // Tick resources every turn
+      tickResources(state.resources, state.player, state);
       for (const e of state.entities) {
         if (e.alive) e.act(state);
       }
-      // Remove dead entities from the map (they stay in array marked alive=false)
     }
   );
 
@@ -183,23 +185,42 @@ function drawHUD(ctx, width, height) {
   });
 
   // ── Player stats bar ──
-  const STAT_H = 28;
+  const STAT_H = 44;
   ctx.fillStyle = 'rgba(0,0,0,0.85)';
   ctx.fillRect(0, 0, width, STAT_H);
 
-  ctx.font = '12px monospace';
+  const res = state.resources;
   const weapon = p.equipment?.armLeft || p.equipment?.armRight;
-  const weaponLabel = weapon ? `${weapon.name} (${weapon.type === 'ranged' ? weapon.ammo + ' ammo' : 'melee'})` : 'Unarmed';
-  const stats = [
-    `HP: ${p.hp}/${p.maxHp}`,
-    `Turn: ${turn}`,
-    `Weapon: ${weaponLabel}`,
-    `F: FOV ${debugFovEnabled ? 'ON' : 'OFF'}`,
+  const weaponLabel = weapon
+    ? `${weapon.name} [${weapon.type === 'ranged' ? weapon.ammo + ' ammo' : 'melee'}]`
+    : 'Unarmed';
+
+  // Row 1: HP, weapon, turn
+  ctx.font = '12px monospace';
+  ctx.fillStyle = '#f0a500';
+  ctx.fillText(`HP: ${p.hp}/${p.maxHp}`, 10, 16);
+  ctx.fillText(`${weaponLabel}`, 140, 16);
+  ctx.fillText(`Turn: ${turn}`, width - 100, 16);
+
+  // Row 2: Resource bars
+  const barW = 100, barH = 8, barY = 26;
+  const resources = [
+    { label: 'O2',   value: res.oxygen,        max: 100, x: 10  },
+    { label: 'PWR',  value: res.power,          max: 100, x: 160 },
+    { label: 'SUIT', value: res.suitIntegrity,  max: 100, x: 310 },
   ];
-  stats.forEach((s, i) => {
-    ctx.fillStyle = '#f0a500';
-    ctx.fillText(s, 10 + i * 220, 18);
-  });
+  ctx.font = '10px monospace';
+  for (const r of resources) {
+    ctx.fillStyle = '#4a4e69';
+    ctx.fillText(r.label, r.x, barY + barH - 1);
+    const bx = r.x + 32;
+    ctx.fillStyle = '#222';
+    ctx.fillRect(bx, barY, barW, barH);
+    ctx.fillStyle = getResourceColor(r.value, r.max);
+    ctx.fillRect(bx, barY, Math.floor(barW * (r.value / r.max)), barH);
+    ctx.fillStyle = '#dfe6e9';
+    ctx.fillText(`${r.value}%`, bx + barW + 4, barY + barH - 1);
+  }
 
   // ── Game over overlay ──
   if (state.phase === 'gameover') {
