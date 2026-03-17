@@ -6,6 +6,8 @@
 
 import { hasLineOfSight } from './los.js';
 import { getCoverModifier, damageDestructible } from './cover.js';
+import { rollLoot } from '../data/enemies.js';
+import { getItemById } from './items.js';
 
 /** Base melee hit chance (no modifiers). */
 const BASE_MELEE_HIT_CHANCE = 0.85;
@@ -161,6 +163,22 @@ export function applyDamage(entity, damage, gameState) {
 export function killEntity(entity, gameState) {
   entity.alive = false;
   entity.hp = 0;
+
+  // Roll loot drop
+  if (entity.lootTable && entity.lootTable.length > 0) {
+    const droppedId = rollLoot(entity.lootTable);
+    if (droppedId) {
+      const item = getItemById(droppedId);
+      if (item) {
+        if (!gameState.itemsOnFloor) gameState.itemsOnFloor = [];
+        gameState.itemsOnFloor.push({ x: entity.x, y: entity.y, item });
+      }
+    }
+  }
+
+  // Track kill count for run stats
+  if (!gameState.stats) gameState.stats = { kills: 0, itemsFound: 0 };
+  gameState.stats.kills++;
 }
 
 /**

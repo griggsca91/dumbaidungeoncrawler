@@ -10,6 +10,7 @@ import { meleeAttack, rangedAttack, getEntityAt, addMessage } from './combat.js'
 import { hasLineOfSight, manhattanDist } from './los.js';
 import { getNextStep } from './pathfinding.js';
 import { getItemById } from './items.js';
+import { ENEMY_CATALOG } from '../data/enemies.js';
 
 /** AI behavior states. */
 const AI_STATE = {
@@ -76,6 +77,11 @@ export function createBot(x, y, subtype = 'drone') {
   enemy.patrolIndex   = 0;
   enemy.faction       = 'station';
 
+  // Attach loot table from catalog (keyed by subtype name)
+  const catalogKey = subtype === 'drone' ? 'patrol_drone' : subtype === 'bot' ? 'security_bot' : 'turret';
+  enemy.lootTable   = ENEMY_CATALOG[catalogKey]?.lootTable || [];
+  enemy.catalogId   = catalogKey;
+
   enemy.act = (gameState) => actBot(enemy, gameState);
   return enemy;
 }
@@ -129,6 +135,10 @@ export function createMutant(x, y, subtype = 'shambler') {
   enemy.patrolPath    = generatePatrolPath(x, y);
   enemy.patrolIndex   = 0;
   enemy.faction       = 'mutant';
+
+  // Attach loot table from catalog
+  enemy.lootTable = ENEMY_CATALOG[subtype]?.lootTable || [];
+  enemy.catalogId = subtype;
 
   enemy.act = (gameState) => actMutant(enemy, gameState);
   return enemy;
@@ -368,4 +378,37 @@ function generatePatrolPath(x, y) {
     { x: x + 2, y: y + 2 },
     { x: x,     y: y + 2 },
   ];
+}
+
+/**
+ * Create an enemy by catalog id at a given position.
+ * Used by the procedural sector generator.
+ * @param {string} catalogId - Key in ENEMY_CATALOG.
+ * @param {number} x
+ * @param {number} y
+ * @returns {object} Enemy entity.
+ */
+export function createEnemyFromCatalog(catalogId, x, y) {
+  const def = ENEMY_CATALOG[catalogId];
+  if (!def) return createBot(x, y, 'drone');   // fallback
+
+  if (def.faction === 'station') {
+    const subtypeMap = { maintenance_bot: 'drone', patrol_drone: 'drone', security_bot: 'bot', turret: 'turret' };
+    const enemy = createBot(x, y, subtypeMap[catalogId] || 'drone');
+    // Override with catalog stats
+    enemy.hp = def.hp; enemy.maxHp = def.maxHp;
+    enemy.name = def.name;
+    if (def.passive) enemy.passive = true;
+    return enemy;
+  } else {
+    const subtypeMap = { shambler: 'shambler', runner: 'runner', brute: 'brute', spitter: 'shambler' };
+    const enemy = createMutant(x, y, subtypeMap[catalogId] || 'shambler');
+    enemy.hp = def.hp; enemy.maxHp = def.maxHp;
+    enemy.name = def.name;
+    // Apply ranged weapon override for spitter
+    if (def.rangedOverride) {
+      enemy.equipment.armLeft = { ...def.rangedOverride };
+    }
+    return enemy;
+  }
 }
