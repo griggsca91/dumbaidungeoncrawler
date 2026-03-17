@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0025",
+  "epic": "audio",
+  "description": "Implement the audio system with positional sound effects, ambient station loops, and combat sounds using the Web Audio API. Sound creates atmosphere and provides gameplay information (hearing enemies before seeing them).",
+  "acceptance_criteria": [
+    "An audio manager initializes a Web Audio API context on first user interaction (click/keypress) to satisfy browser autoplay policies.",
+    "Sound effects play for: player footsteps, door open/close, weapon fire (ranged), melee impact, enemy death, item pickup, and terminal interaction.",
+    "Ambient background loop plays continuously: a low station hum with occasional random creaks and distant clanking.",
+    "Sound volume attenuates with distance from the source — enemies further away are quieter.",
+    "Given an enemy is within hearing range but outside vision, when it moves or acts, then a directional audio cue plays (indicating approximate direction).",
+    "Combat sounds are distinct per weapon type (energy weapon = zap, ballistic = bang, melee = clang).",
+    "A master volume control and mute toggle are accessible via a settings key."
+  ],
+  "status": "not-started",
+  "priority": "medium",
+  "estimate": 5,
+  "dependencies": ["STORY-0001"],
+  "linked_issues": [],
+  "spec_section": "8.2 Audio Direction, 11.1 MVP Scope (Audio)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Sound propagation alerts enemies. Running is louder than walking.' Web Audio API provides panning and gain nodes for positional audio. Use free CC0 sound packs (freesound.org) for MVP. Browser autoplay policy requires user gesture before audio context creation.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

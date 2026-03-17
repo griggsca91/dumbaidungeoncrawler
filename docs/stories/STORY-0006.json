@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0006",
+  "epic": "content",
+  "description": "Build a procedural sector generator that assembles rooms from hand-designed templates into connected floor layouts. For MVP, generate 3 sector types (Docking Ring, Habitation Deck, Engineering) with corridors, doors, and guaranteed points of interest.",
+  "acceptance_criteria": [
+    "Given a new run starts, when a sector is generated, then it produces a connected graph of 8-15 rooms linked by corridors.",
+    "Room templates are defined as JSON data files specifying tile layout, door positions, and object placement slots.",
+    "At least 5 distinct room templates exist per sector type (15 total for 3 sectors).",
+    "Every generated sector has at least one guaranteed loot room, one terminal room, and one enemy encounter room.",
+    "Corridors connect rooms via door tiles that can be opened, closed, or locked.",
+    "No rooms are inaccessible — the generator validates full connectivity before finalizing.",
+    "Each sector type uses distinct floor/wall tile variants (e.g., metal grating for Engineering, carpet for Habitation)."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 8,
+  "dependencies": ["STORY-0001", "STORY-0003"],
+  "linked_issues": [],
+  "spec_section": "7.2 Station Sectors, 11.1 MVP Scope (Procedural sector generation)",
+  "source_file": "docs/game-spec.md",
+  "notes": "MVP spec says 4 weeks / 3 sectors. This is the largest single story — consider splitting room template authoring into a separate story if needed. Cogmind approach: hand-designed rooms assembled procedurally.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

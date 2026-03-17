@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0011",
+  "epic": "systems",
+  "description": "Implement the modular equipment system with 5 equipment slots (head, torso, left arm, right arm, back, legs), item pickup/drop, equipment degradation, and stat effects. Equipment defines the player's build identity each run.",
+  "acceptance_criteria": [
+    "The player has 6 equipment slots: head, torso, left arm, right arm, back, and legs.",
+    "Given the player walks over an item tile, when they press the pickup key, then the item is added to their inventory (if space available) or directly equipped to the matching slot.",
+    "Each equipped item modifies player stats (armor, damage, vision range, speed, power draw) as defined in its data.",
+    "Items have a durability value that decreases with use (weapons lose durability on attack, armor on taking damage).",
+    "Given an item's durability reaches 0, when it would be used, then it breaks and is removed from the equipment slot with a 'broken' message.",
+    "The player can swap equipment via the inventory screen, dropping the previously equipped item on the ground.",
+    "At least 15 distinct items exist across the slot types for MVP, defined in a JSON data file."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 5,
+  "dependencies": ["STORY-0002"],
+  "linked_issues": [],
+  "spec_section": "5.2 Modular Equipment System",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec says '5 slot types, ~50 unique items with stats and degradation' for full MVP. Start with 15 items for the first pass; expand item variety in a content story. Spec uses 5 named types but arms are x2 = 6 slots.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

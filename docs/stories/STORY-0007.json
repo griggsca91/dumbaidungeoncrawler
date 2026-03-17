@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0007",
+  "epic": "combat",
+  "description": "Implement the core turn-based combat system: action points, melee attacks, ranged attacks with ammo, hit/miss calculation, damage dealing, and entity death. This makes the game playable as a combat roguelike.",
+  "acceptance_criteria": [
+    "Each entity (player and enemies) has an AP pool that refreshes at the start of their turn.",
+    "Given the player is adjacent to an enemy, when they press the attack key or move into the enemy tile, then a melee attack is executed costing 1 AP.",
+    "Given the player has a ranged weapon equipped with ammo > 0, when they target an enemy in LOS and press fire, then a ranged attack is executed, deducting 1 ammo.",
+    "Hit chance is calculated based on distance, cover status, and weapon accuracy — displayed as a percentage before confirming the attack.",
+    "Damage reduces the target's HP. When HP reaches 0, the entity is removed from the grid and a death animation/effect plays.",
+    "A combat log message is appended to the message log for every attack (hit/miss, damage dealt, entity killed).",
+    "The player can see their own HP, current weapon, and ammo count in the HUD at all times."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 5,
+  "dependencies": ["STORY-0002"],
+  "linked_issues": [],
+  "spec_section": "5.1 Turn-Based Grid Combat, 5.1 Ranged vs. Melee",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Each action (move, attack, use item, interact) costs AP. Enemies act simultaneously after the player commits their turn.' Keep hit calculation simple for MVP — distance + cover modifier.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

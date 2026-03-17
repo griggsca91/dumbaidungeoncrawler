@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0002",
+  "epic": "engine",
+  "description": "Implement keyboard input handling for grid-based player movement with turn resolution. The player presses a direction key, the character moves one tile, and then all game entities process their turn. This establishes the core turn-based feel.",
+  "acceptance_criteria": [
+    "Given the player presses an arrow key or WASD, when the input is processed, then the player entity moves exactly one tile in that direction.",
+    "Movement into a wall tile or off the map edge is rejected with no turn consumed.",
+    "After the player moves, all other entities (enemies, systems) process one turn step before input is accepted again.",
+    "The player's facing direction updates to match the last movement direction.",
+    "A turn counter increments by 1 after each valid player action.",
+    "Input is debounced so holding a key doesn't cause rapid multi-tile movement — one keypress = one turn."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 3,
+  "dependencies": ["STORY-0001"],
+  "linked_issues": [],
+  "spec_section": "5.1 Turn-Based Grid Combat",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec says 'Each action costs action points (AP). Enemies act simultaneously after the player commits their turn.' For MVP, start with 1 AP per move, expand later.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

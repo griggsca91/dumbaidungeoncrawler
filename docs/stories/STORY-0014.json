@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0014",
+  "epic": "systems",
+  "description": "Implement the Warden AI alert escalation system. Alert level (0-5) increases based on player actions (combat, hacking, destroying cameras) and drives enemy spawn rates and types, creating a dynamic difficulty clock.",
+  "acceptance_criteria": [
+    "A global alert level integer (0-5) persists throughout the run, starting at 0.",
+    "Combat noise increases alert by 1 per combat encounter. Hacking increases by 1 per hack. Destroying a camera increases by 1.",
+    "At alert levels 0-1, only passive maintenance bots and dormant turrets are present.",
+    "At alert levels 2-3, active security patrols spawn in unexplored rooms and some doors auto-lock.",
+    "At alert levels 4-5, hunter-killer enemies spawn, and the Warden can depower rooms the player is approaching.",
+    "The current alert level is displayed in the HUD as a meter (e.g., 5 pips or a bar).",
+    "Alert level never decreases during a run — it is a one-way escalation."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 3,
+  "dependencies": ["STORY-0009", "STORY-0007"],
+  "linked_issues": [],
+  "spec_section": "5.4 Threat Escalation (The Warden AI)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'The Warden cannot be permanently defeated — only managed. Stealth runs keep alert low. Combat runs must deal with escalating response. This creates a natural timer.' MVP uses 3 levels (spec says 3 for MVP), expandable to 5.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

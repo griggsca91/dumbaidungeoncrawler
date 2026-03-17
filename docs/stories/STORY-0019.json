@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0019",
+  "epic": "ui",
+  "description": "Implement the full-screen map view and sector selection screen. The map shows all explored rooms with annotations, and a sector selection screen lets the player choose which sector to enter at the start of a run or at sector junctions.",
+  "acceptance_criteria": [
+    "Pressing 'M' toggles a full-screen map overlay showing all explored rooms and corridors.",
+    "Explored rooms are color-coded by power state (amber = powered, gray = dark, red = alerted).",
+    "The player's current position is highlighted on the map.",
+    "The player can annotate rooms by pressing a key while hovering: cycle through markers (dangerous, looted, point of interest).",
+    "At sector junction points (specific door tiles), the player can choose which sector to enter next from available options.",
+    "The sector selection screen shows sector name, difficulty indicator, and hazard info (if Scanner Array is repaired)."
+  ],
+  "status": "not-started",
+  "priority": "medium",
+  "estimate": 3,
+  "dependencies": ["STORY-0006", "STORY-0017"],
+  "linked_issues": [],
+  "spec_section": "A.3.4 Map & Minimap System, 4.3 Core Loop (PREPARE)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Full-screen map mode with annotations. Sector overview shows known room connections, power grid status, atmosphere warnings.' Map data already tracked by the explored-tiles array from FOV story.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

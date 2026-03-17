@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0009",
+  "epic": "combat",
+  "description": "Implement basic enemy AI with three behavior states: patrol (follow a path), chase (pursue player when detected), and attack (engage when in range). Two faction types for MVP: station defense bots and mutated crew.",
+  "acceptance_criteria": [
+    "Given an enemy is in 'patrol' state, when it takes a turn, then it moves along a predefined path or wanders randomly within its room.",
+    "Given the player enters an enemy's detection radius AND is within their vision arc, when the enemy's turn processes, then the enemy transitions to 'chase' state.",
+    "Given an enemy is in 'chase' state, when it takes a turn, then it pathfinds toward the player's last known position using a simple A* or BFS algorithm.",
+    "Given an enemy is adjacent to the player (melee) or within weapon range (ranged), when it takes a turn, then it attacks the player.",
+    "Station defense bots are ranged attackers that maintain distance and prefer cover positions.",
+    "Mutated crew are melee-focused with erratic movement patterns (occasional random direction changes during chase).",
+    "If an enemy loses sight of the player for 3+ turns, it returns to patrol state at its last known player position."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 5,
+  "dependencies": ["STORY-0007", "STORY-0004"],
+  "linked_issues": [],
+  "spec_section": "7.3 Enemy Design Philosophy, 11.1 MVP Scope (Enemy AI)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Station Defenses: Predictable, pattern-based. Hackable.' and 'Mutated Crew: Melee-focused, erratic movement. Some retain partial intelligence.' MVP = 2 factions, 3 states each.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

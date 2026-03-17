@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0028",
+  "epic": "content",
+  "description": "Create enemy data definitions and spawn tables for the 2 MVP factions. Enemy types are defined in a JSON data file specifying stats, behavior type, loot drops, and sector-specific spawn weights.",
+  "acceptance_criteria": [
+    "An enemies.json data file defines all enemy types with fields: id, name, faction, hp, damage, speed, detectionRange, behaviorType (patrol/chase/guard), lootTable, spriteId.",
+    "Station Defense faction includes: maintenance bot (passive, 10 HP), patrol drone (ranged, 20 HP), security bot (ranged + cover-seeking, 35 HP), and turret (stationary, 50 HP).",
+    "Mutated Crew faction includes: shambler (slow melee, 15 HP), runner (fast melee, 10 HP), brute (heavy melee, 40 HP), and spitter (ranged acid, 20 HP).",
+    "Each sector has a spawn table defining which enemies appear and at what frequency, influenced by the Warden alert level.",
+    "Enemy loot tables specify item drop chances on death (e.g., 30% chance of ammo, 10% chance of repair kit).",
+    "All enemy definitions load from JSON and integrate with the AI system from STORY-0009."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 2,
+  "dependencies": ["STORY-0009"],
+  "linked_issues": [],
+  "spec_section": "7.3 Enemy Design Philosophy",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Station Defenses: Predictable, pattern-based. Hackable.' and 'Mutated Crew: Melee-focused, erratic movement.' 8 enemy types for MVP (spec says 8-10). Data-driven so adding more is easy.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

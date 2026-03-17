@@ -1,0 +1,25 @@
+{
+  "id": "STORY-0027",
+  "epic": "content",
+  "description": "Create the item data definitions for MVP: at least 30 items across all equipment slot types with varied stats, durability, and power draw. Items are defined in a JSON data file that the equipment system reads at runtime.",
+  "acceptance_criteria": [
+    "An items.json data file defines all items with fields: id, name, slot, stats (damage, armor, accuracy, visionBonus, powerDraw), durability, rarity, description.",
+    "At least 5 head-slot items exist (e.g., basic helmet, flashlight visor, sealed helmet, IR scanner, rebreather).",
+    "At least 5 torso-slot items exist (e.g., jumpsuit, light armor, power armor, hazmat suit, stealth suit).",
+    "At least 8 arm-slot items exist: 4 melee weapons (pipe, crowbar, plasma cutter, stun baton) and 4 ranged weapons (pistol, shotgun, rifle, energy weapon).",
+    "At least 4 back-slot items exist (e.g., backpack, shield generator, hacking rig, extra O2 tank).",
+    "At least 4 leg-slot items exist (e.g., standard boots, mag-boots, sprint boosters, armored greaves).",
+    "Items have a 'rarity' field (common, uncommon, rare) that affects spawn frequency in the proc-gen.",
+    "All items load correctly from the JSON file and integrate with the equipment system from STORY-0011."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 3,
+  "dependencies": ["STORY-0011"],
+  "linked_issues": [],
+  "spec_section": "5.2 Modular Equipment System, 11.1 MVP Scope (Modular equipment system)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec says ~50 items for full MVP. Start with 30 for first playable. Item names from spec: 'broken pipes, severed robot arms, plasma cutter, crowbar, mag-boots.' Data-driven design means adding items later is trivial.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

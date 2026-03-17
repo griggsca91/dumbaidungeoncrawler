@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0005",
+  "epic": "engine",
+  "description": "Implement a dynamic per-tile lighting system using Canvas compositing. Light sources (room lights, player flashlight, fires) emit colored light that falls off with distance. This is the highest-ROI visual investment per the spec research.",
+  "acceptance_criteria": [
+    "Each tile has a computed light color and intensity value based on nearby light sources.",
+    "Light intensity falls off with distance from the source (linear or inverse-square).",
+    "Multiple light sources blend additively on overlapping tiles.",
+    "The player carries a flashlight that emits a cone-shaped light in their facing direction.",
+    "Unpowered rooms are dark — only the player's flashlight illuminates them.",
+    "Powered rooms have ambient warm-amber light from ceiling light sources defined in the room template.",
+    "The lighting overlay is rendered via a separate offscreen canvas composited with globalCompositeOperation 'multiply' or equivalent."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 5,
+  "dependencies": ["STORY-0003", "STORY-0004"],
+  "linked_issues": [],
+  "spec_section": "A.2.2 Color Palette Strategy, A.2.3 Layered Rendering Pipeline (Layer 5)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec Appendix A says: 'Dynamic per-tile color lighting is the single highest-ROI visual investment for a 2D roguelike.' Use offscreen canvas + multiply composite for performance.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

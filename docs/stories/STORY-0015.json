@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0015",
+  "epic": "progression",
+  "description": "Implement permadeath with the run cycle and airlock stash meta-progression. When the player dies, the run ends. Items stashed in the ship's airlock persist between runs. A new run starts with stashed gear available.",
+  "acceptance_criteria": [
+    "Given the player's HP reaches 0, when the death is processed, then a 'run over' screen displays run statistics (turns survived, enemies killed, items found).",
+    "From the run-over screen, the player can start a new run.",
+    "The player can access their docked ship at any time by returning to the Docking Ring sector entrance.",
+    "Given the player is in the ship, when they interact with the airlock stash, then they can move items from their inventory into the stash (max 6 stash slots).",
+    "Items in the airlock stash persist across runs and are available at the start of the next run.",
+    "On starting a new run, the player begins in the docked ship with access to stashed items before entering the station.",
+    "All equipped and non-stashed items are lost on death."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 3,
+  "dependencies": ["STORY-0011", "STORY-0006"],
+  "linked_issues": [],
+  "spec_section": "6.2 Between-Run Meta-Progression (Airlock Stash)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Physical items stashed in your ship's airlock persist between runs. Limited space forces meaningful choices. This is the core meta-loop.' Use localStorage or IndexedDB for persistence across browser sessions.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

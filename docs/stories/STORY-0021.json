@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0021",
+  "epic": "narrative",
+  "description": "Implement the tutorial experience in the Docking Ring sector. The first run guides the player through basic mechanics (movement, combat, item pickup, resource management, stashing) without feeling like a heavy-handed tutorial.",
+  "acceptance_criteria": [
+    "The first run starts in a simplified Docking Ring layout with fewer rooms and weaker enemies.",
+    "Context-sensitive tooltip messages appear for first-time actions: first move, first item pickup, first combat, first terminal interaction, first stash interaction.",
+    "Tooltips are non-blocking — they appear as message log entries or brief overlay text that auto-dismiss after 3 seconds.",
+    "A tutorial flag is stored in persistence — the tutorial only triggers on the very first run.",
+    "The Docking Ring sector always serves as the starting sector for every run (tutorial or not).",
+    "After the tutorial run (whether the player survives or dies), subsequent runs skip tutorial messages."
+  ],
+  "status": "not-started",
+  "priority": "medium",
+  "estimate": 2,
+  "dependencies": ["STORY-0015", "STORY-0007", "STORY-0010"],
+  "linked_issues": [],
+  "spec_section": "11.1 MVP Scope (Tutorial)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'First-run guided experience in Docking Ring.' Keep it light — roguelike players hate heavy tutorials. Message log tips are the least intrusive approach.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

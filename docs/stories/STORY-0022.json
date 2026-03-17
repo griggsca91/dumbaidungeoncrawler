@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0022",
+  "epic": "art",
+  "description": "Create the base station tileset for floors, walls, doors, and structural elements across the 3 MVP sector themes (Docking Ring, Habitation Deck, Engineering). Use the restricted color palette from the spec.",
+  "acceptance_criteria": [
+    "A 32x32 pixel tileset image contains all base tiles organized in a grid spritesheet.",
+    "Floor tile variants exist for each sector: metal grating (Docking), carpet/linoleum (Habitation), heavy plating (Engineering).",
+    "Wall tiles include: solid hull wall, windowed wall, damaged/cracked wall, and doorframe.",
+    "Door tiles exist for each state: open, closed, locked (red indicator light), and destroyed.",
+    "Interactive object tiles exist: terminal (on/off states), power junction, crate, locker, chair, table.",
+    "All tiles use the color palette from spec A.2.2: dark grays/blues for hull, warm amber for powered elements, red for emergency.",
+    "The tileset loads as a single spritesheet image with a companion JSON mapping tile IDs to spritesheet coordinates."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 5,
+  "dependencies": ["STORY-0003"],
+  "linked_issues": [],
+  "spec_section": "8.1 Visual Direction, A.2.2 Color Palette Strategy, 11.1 MVP Scope (Art)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Retro-future industrial — think Alien (1979) control rooms. CRT monitors with green phosphor text. Chunky mechanical switches.' Placeholder colored rectangles work until this story is complete.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

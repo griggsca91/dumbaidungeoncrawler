@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0004",
+  "epic": "engine",
+  "description": "Implement the field-of-view (FOV) and vision cone system. The player has a directional 90-degree vision cone; tiles outside the cone are fully black. Previously seen tiles render as dim 'memory' tiles. This is the signature visual mechanic that creates tension.",
+  "acceptance_criteria": [
+    "Given the player is facing a direction, when the scene renders, then only tiles within a 90-degree forward cone (plus a small peripheral radius) are fully visible.",
+    "Tiles outside the vision cone but within the player's room render at 30% brightness in desaturated gray (memory tiles).",
+    "Tiles that have never been seen render as fully black.",
+    "When the player changes facing direction, the vision cone rotates to match.",
+    "Line-of-sight is blocked by wall tiles — the player cannot see through walls even within the cone.",
+    "Light sources in powered rooms override the cone: tiles in a lit, powered room are visible regardless of player facing."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 5,
+  "dependencies": ["STORY-0003"],
+  "linked_issues": [],
+  "spec_section": "5.1 Facing and Vision, A.3.1 Vision Cone & Darkness System",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec calls this 'THE signature visual mechanic.' Implement raycasting or shadowcasting for LOS. Canvas globalAlpha + fillRect overlay for darkness. Memory tile data stored in a 2D boolean array.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

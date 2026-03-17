@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0018",
+  "epic": "ui",
+  "description": "Implement the inventory and equipment management screen. A modal overlay where the player can view all carried items, equip/unequip gear, inspect item stats, and drop items. Must be usable mid-run via a hotkey.",
+  "acceptance_criteria": [
+    "Pressing 'I' or 'Tab' toggles the inventory screen as a modal overlay on top of the game viewport.",
+    "The inventory displays all carried items as icons in a grid, with the current equipment loadout shown alongside.",
+    "Hovering or selecting an item shows a tooltip with: item name, slot type, stats (damage, armor, durability, power draw), and a one-line description.",
+    "The player can equip an item by selecting it and choosing 'equip' — the item moves to the matching slot and any previously equipped item returns to inventory.",
+    "The player can drop an item, which removes it from inventory and places it on the current tile.",
+    "Inventory has a hard cap of 8 slots (expandable via backpack equipment).",
+    "The game is paused (no turns process) while the inventory screen is open."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 3,
+  "dependencies": ["STORY-0011", "STORY-0017"],
+  "linked_issues": [],
+  "spec_section": "5.2 Modular Equipment System, 5.5 Resource Management (Inventory Space)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Inventory Space — Hard cap, must make tradeoffs.' Keep the UI clean and keyboard-navigable. Render as a Canvas overlay, not an HTML element.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

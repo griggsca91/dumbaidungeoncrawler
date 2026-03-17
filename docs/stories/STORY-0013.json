@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0013",
+  "epic": "systems",
+  "description": "Implement doors and basic hacking interaction. Doors can be open, closed, locked, or destroyed. Hacking terminals allows the player to unlock doors, reveal map data, and read lore entries — but increases the Warden alert level.",
+  "acceptance_criteria": [
+    "Doors exist as interactive tiles with states: open, closed, locked, and destroyed.",
+    "Given the player moves into a closed door tile, when the door is unlocked, then it opens and the player enters the tile.",
+    "Given the player moves into a locked door, when they have no hacking capability, then the move is rejected with a 'locked' message.",
+    "Given the player interacts with a terminal, when they choose 'hack', then a simple skill check determines success. On success, the player can: unlock nearby doors, reveal the room layout on the minimap, or read a lore entry.",
+    "Each successful hack increases the Warden alert level by 1 point.",
+    "Destroyed doors (from combat or explosions) become permanently open passable tiles with a broken-frame visual."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 3,
+  "dependencies": ["STORY-0002", "STORY-0006"],
+  "linked_issues": [],
+  "spec_section": "5.3 Station Systems Interaction (Network/Hacking)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Terminal access reveals map data, enemy positions, lore entries. Active hacking increases network alert level.' Keep hacking simple for MVP — binary success/fail, not a minigame.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

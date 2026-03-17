@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0003",
+  "epic": "engine",
+  "description": "Implement a layered 2D tile rendering pipeline on the Canvas context. The renderer draws floor tiles, wall/structure tiles, objects, entities, and effects as separate layers in order, allowing dynamic composition of room visuals.",
+  "acceptance_criteria": [
+    "The renderer draws tiles in defined layer order: floors (0), walls (1), objects (2), entities (3), effects/particles (4), lighting overlay (5), UI (6).",
+    "Each layer can be independently toggled on/off for debugging purposes.",
+    "Tiles are drawn from a spritesheet/tileset image using source rectangle coordinates.",
+    "Only tiles within the camera viewport are drawn (off-screen culling) to maintain performance.",
+    "The renderer supports drawing at least 25x17 tiles per frame at 60fps without jank.",
+    "A placeholder colored-rectangle fallback renders when sprite assets are not yet available."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 3,
+  "dependencies": ["STORY-0001"],
+  "linked_issues": [],
+  "spec_section": "A.2.3 Layered Rendering Pipeline",
+  "source_file": "docs/game-spec.md",
+  "notes": "Layer spec from Appendix A.2.3. Canvas 2D context drawImage() with spritesheet clipping. Consider offscreen canvas per layer for compositing.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

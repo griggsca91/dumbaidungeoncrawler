@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0026",
+  "epic": "infra",
+  "description": "Implement save/load persistence using browser localStorage. Save the complete game state on every sector transition and on quit. Load restores exactly where the player left off. No save-scumming — only one save slot that is deleted on death.",
+  "acceptance_criteria": [
+    "The full game state (player stats, inventory, map explored state, enemy positions, resource levels, alert level, stash contents, ship repair progress) is serializable to JSON.",
+    "Game state auto-saves to localStorage when the player transitions between sectors and when they quit to menu.",
+    "Given a save exists, when the player opens the game, then a 'Continue' option loads the saved state exactly as it was.",
+    "Given the player dies, when the run ends, then the active save is deleted (only the meta-progression data — stash and ship repairs — persists).",
+    "If localStorage is full or unavailable, a warning message displays and the game continues without saving.",
+    "A 'New Game' option always starts a fresh run (with meta-progression intact)."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 3,
+  "dependencies": ["STORY-0015"],
+  "linked_issues": [],
+  "spec_section": "9.3 Technical Requirements (Save system)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Save-and-quit (standard roguelike — no save-scumming, but graceful session handling).' localStorage has a ~5MB limit per origin — game state JSON should be well under this. Consider using JSON.stringify with replacer to exclude transient data.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

@@ -1,0 +1,23 @@
+{
+  "id": "STORY-0008",
+  "epic": "combat",
+  "description": "Implement the cover system where walls, objects, and destructible furniture provide half or full cover to entities behind them, reducing incoming hit chance. Destructible cover can be broken by attacks.",
+  "acceptance_criteria": [
+    "Given an entity is positioned behind a wall or tall object relative to the attacker, when the attacker fires, then the hit chance is reduced by the cover value (50% for half cover, 75% for full cover).",
+    "Cover is determined by checking tiles between attacker and target for blocking objects.",
+    "Destructible cover objects (crates, consoles, barricades) have HP and can be destroyed by attacks.",
+    "When destructible cover is destroyed, it is replaced with a rubble/debris tile that provides no cover.",
+    "A visual indicator shows when the player or a targeted enemy has cover (e.g., shield icon or color tint on the tile).",
+    "Both the player and enemies benefit from cover — AI entities will seek cover positions."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 3,
+  "dependencies": ["STORY-0007"],
+  "linked_issues": [],
+  "spec_section": "5.1 Cover System",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Objects and walls provide half/full cover, reducing hit chance. Destructible cover adds tactical depth.' Cover is determined by LOS ray intersecting cover-tagged tiles.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

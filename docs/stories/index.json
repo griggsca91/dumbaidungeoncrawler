@@ -1,0 +1,254 @@
+{
+  "project": "derelict-protocol",
+  "source_spec": "docs/game-spec.md",
+  "tech_stack": "Vanilla JS + Canvas HTML",
+  "generated_at": "2026-03-16T18:00:00Z",
+  "updated_at": "2026-03-16T18:00:00Z",
+  "summary": {
+    "total_stories": 28,
+    "total_points": 102,
+    "by_epic": {
+      "engine": { "count": 5, "points": 19 },
+      "combat": { "count": 3, "points": 13 },
+      "systems": { "count": 4, "points": 14 },
+      "progression": { "count": 2, "points": 6 },
+      "ui": { "count": 3, "points": 11 },
+      "narrative": { "count": 2, "points": 5 },
+      "art": { "count": 3, "points": 13 },
+      "audio": { "count": 1, "points": 5 },
+      "content": { "count": 2, "points": 5 },
+      "infra": { "count": 1, "points": 3 }
+    },
+    "by_priority": {
+      "critical": 10,
+      "high": 12,
+      "medium": 6
+    }
+  },
+  "stories": [
+    {
+      "id": "STORY-0001",
+      "epic": "engine",
+      "description": "Set up the vanilla JS + Canvas project scaffolding with game loop, tile grid, and camera.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0002",
+      "epic": "engine",
+      "description": "Implement keyboard input handling for grid-based player movement with turn resolution.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0003",
+      "epic": "engine",
+      "description": "Implement a layered 2D tile rendering pipeline on the Canvas context.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0004",
+      "epic": "engine",
+      "description": "Implement the field-of-view (FOV) and vision cone system with memory tiles.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0005",
+      "epic": "engine",
+      "description": "Implement dynamic per-tile lighting system using Canvas compositing.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0006",
+      "epic": "content",
+      "description": "Build a procedural sector generator assembling rooms from hand-designed templates.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 8
+    },
+    {
+      "id": "STORY-0007",
+      "epic": "combat",
+      "description": "Implement core turn-based combat: AP, melee/ranged attacks, hit/miss, damage, death.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0008",
+      "epic": "combat",
+      "description": "Implement the cover system with half/full cover and destructible objects.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0009",
+      "epic": "combat",
+      "description": "Implement enemy AI with patrol, chase, and attack states for 2 factions.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0010",
+      "epic": "systems",
+      "description": "Implement resource management: oxygen, power cell, and suit integrity.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0011",
+      "epic": "systems",
+      "description": "Implement modular equipment system with 6 slots, item stats, and degradation.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0012",
+      "epic": "systems",
+      "description": "Implement station power grid: room power states, lighting changes, terminal interaction.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0013",
+      "epic": "systems",
+      "description": "Implement doors and basic hacking interaction with alert level consequences.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0014",
+      "epic": "systems",
+      "description": "Implement Warden AI alert escalation system (levels 0-5) driving enemy spawns.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0015",
+      "epic": "progression",
+      "description": "Implement permadeath run cycle and airlock stash meta-progression.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0016",
+      "epic": "progression",
+      "description": "Implement ship repair milestone system with win condition.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0017",
+      "epic": "ui",
+      "description": "Implement main game HUD: equipment slots, resource bars, alert meter, minimap, message log.",
+      "status": "not-started",
+      "priority": "critical",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0018",
+      "epic": "ui",
+      "description": "Implement inventory and equipment management screen as modal overlay.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0019",
+      "epic": "ui",
+      "description": "Implement full-screen map view and sector selection screen.",
+      "status": "not-started",
+      "priority": "medium",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0020",
+      "epic": "narrative",
+      "description": "Implement lore terminal system with 15+ text logs and persistent codex.",
+      "status": "not-started",
+      "priority": "medium",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0021",
+      "epic": "narrative",
+      "description": "Implement tutorial experience in Docking Ring with context-sensitive tips.",
+      "status": "not-started",
+      "priority": "medium",
+      "estimate": 2
+    },
+    {
+      "id": "STORY-0022",
+      "epic": "art",
+      "description": "Create base station tileset (floors, walls, doors, objects) for 3 sector themes.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0023",
+      "epic": "art",
+      "description": "Create player and enemy sprites with animation frames for 2 factions.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0024",
+      "epic": "art",
+      "description": "Create particle effects and combat visual feedback using Canvas drawing.",
+      "status": "not-started",
+      "priority": "medium",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0025",
+      "epic": "audio",
+      "description": "Implement audio system with Web Audio API: positional SFX, ambient loops, combat sounds.",
+      "status": "not-started",
+      "priority": "medium",
+      "estimate": 5
+    },
+    {
+      "id": "STORY-0026",
+      "epic": "infra",
+      "description": "Implement save/load persistence using browser localStorage with permadeath rules.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0027",
+      "epic": "content",
+      "description": "Create item data definitions JSON for 30+ items across all equipment slots.",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 3
+    },
+    {
+      "id": "STORY-0028",
+      "epic": "content",
+      "description": "Create enemy data definitions and spawn tables for 2 factions (8 enemy types).",
+      "status": "not-started",
+      "priority": "high",
+      "estimate": 2
+    }
+  ]
+}

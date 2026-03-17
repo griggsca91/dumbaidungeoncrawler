@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0017",
+  "epic": "ui",
+  "description": "Implement the main game HUD with equipment slot display, resource bars (O2, power, suit integrity), Warden alert meter, and minimap. The HUD must be always visible during gameplay without obscuring the main viewport.",
+  "acceptance_criteria": [
+    "The HUD renders in fixed screen-space panels around the game viewport, matching the layout from spec A.3.5.",
+    "A left panel shows the 6 equipment slots with item icons (or empty slot indicators) for head, torso, arms, back, and legs.",
+    "Resource bars for O2, Power Cell, and Suit Integrity display below the equipment slots with percentage values and color coding (green > 50%, yellow 25-50%, red < 25%).",
+    "The Warden alert level displays as filled pips (e.g., 5 circles, filled = active alert level).",
+    "A minimap renders in the top-right showing explored rooms, the player position, and room power states.",
+    "The minimap updates as the player explores new rooms.",
+    "A message log at the bottom displays the last 4-5 game messages, color-coded by type (combat = red, lore = gold, system = white)."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 5,
+  "dependencies": ["STORY-0003", "STORY-0010", "STORY-0011"],
+  "linked_issues": [],
+  "spec_section": "11.1 MVP Scope (UI/HUD), A.3.5 UI Layout for 2D",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec provides an ASCII wireframe of the target layout. All UI rendered via Canvas — no HTML overlays. Consider a UI canvas layer separate from the game canvas for performance.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

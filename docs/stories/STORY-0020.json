@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0020",
+  "epic": "narrative",
+  "description": "Implement the lore terminal system and environmental storytelling. Terminals scattered throughout the station contain text logs (crew audio logs, corporate memos, research notes) that reveal the backstory of Kharon-7 across multiple runs.",
+  "acceptance_criteria": [
+    "Terminal objects can be placed in rooms via the room template data.",
+    "Given the player stands adjacent to a terminal and presses interact, when the terminal is active, then a text log overlay displays with the log content.",
+    "At least 15 unique lore entries exist across the 3 MVP sectors, organized chronologically to reveal the station's backstory.",
+    "Lore entries are categorized: crew personal logs, corporate memos (with dark humor), and research notes (alien discovery).",
+    "Decoded/read terminals are tracked in a persistent codex that survives between runs.",
+    "Terminals in unpowered rooms display as dark/inactive and cannot be read until the room is powered.",
+    "A lore codex screen (accessible from the ship) shows all collected entries organized by category."
+  ],
+  "status": "not-started",
+  "priority": "medium",
+  "estimate": 3,
+  "dependencies": ["STORY-0002", "STORY-0012"],
+  "linked_issues": [],
+  "spec_section": "7.1 Lore Summary, 11.1 MVP Scope (Lore system)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Terminal text logs, basic environmental storytelling.' Lore entries are pure text — no voice acting. Include corporate memos with gallows humor per the tone direction. Store read-entries in localStorage.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

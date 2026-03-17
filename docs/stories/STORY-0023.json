@@ -1,0 +1,24 @@
+{
+  "id": "STORY-0023",
+  "epic": "art",
+  "description": "Create player character and enemy sprites with basic animations. Player needs 4-directional walk cycle, attack, and hurt frames. Enemies need idle, move, attack, and death frames for 2 factions (bots and mutants).",
+  "acceptance_criteria": [
+    "Player character sprite has: 4-direction idle frames, 4-direction walk cycle (4 frames each), attack animation (3 frames), and hurt flash.",
+    "Station defense bot sprites exist for: patrol drone, security bot, and turret — each with idle, move/rotate, attack, and destroyed states.",
+    "Mutated crew sprites exist for: basic mutant, armored mutant, and fast runner — each with idle, move, attack, and death animations.",
+    "All enemy sprites have at least 3 animation frames per action state.",
+    "Death animations end with a corpse/wreckage sprite that remains on the tile.",
+    "All sprites use the spec color palette and are 32x32 pixels.",
+    "Sprites are packed into a character spritesheet with a JSON mapping file."
+  ],
+  "status": "not-started",
+  "priority": "high",
+  "estimate": 5,
+  "dependencies": ["STORY-0003"],
+  "linked_issues": [],
+  "spec_section": "7.3 Enemy Design Philosophy, A.2.4 Animation Budget, 11.1 MVP Scope (Art)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec says '8-10 enemy types' for MVP. Start with 6 (3 per faction). Spec animation budget: 3-4 frames per action per enemy type. Total ~120-150 character sprites.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

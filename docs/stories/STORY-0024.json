@@ -1,0 +1,25 @@
+{
+  "id": "STORY-0024",
+  "epic": "art",
+  "description": "Create particle effects and combat visual feedback using Canvas drawing calls. Includes muzzle flash, bullet trails, melee slash arcs, explosions, sparks, and environmental particles (steam, floating dust).",
+  "acceptance_criteria": [
+    "Muzzle flash: a bright 2-frame sprite/circle that appears at the weapon position when a ranged attack fires.",
+    "Bullet trail: a thin line drawn from attacker to target position that fades over 3 frames.",
+    "Melee slash: an arc sprite/canvas path that sweeps in the attack direction.",
+    "Explosion: an expanding circle with orange-red gradient that fades over 5 frames, used for grenades and destructible objects.",
+    "Sparks: small pixel particles that scatter from damaged electrical equipment (2-3 pixels, random velocity, short lifespan).",
+    "Environmental steam: slow-drifting translucent white particles emitted from vent tiles.",
+    "Screen-edge damage flash: the canvas border flashes red briefly when the player takes damage.",
+    "All effects are non-blocking and play asynchronously over multiple render frames without pausing the turn system."
+  ],
+  "status": "not-started",
+  "priority": "medium",
+  "estimate": 3,
+  "dependencies": ["STORY-0003", "STORY-0007"],
+  "linked_issues": [],
+  "spec_section": "A.2.4 Animation Budget (Combat FX, Atmospheric particles)",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec: 'Particle effects for atmosphere (steam, sparks, floating debris in zero-g).' Use simple Canvas arc/fillRect calls with alpha fade — no sprite dependencies. A small particle system class manages active particles.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}

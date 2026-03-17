@@ -1,0 +1,25 @@
+{
+  "id": "STORY-0010",
+  "epic": "systems",
+  "description": "Implement the resource management system for oxygen, power cell, and suit integrity. Each resource depletes from specific actions/conditions and has consequences at zero, creating ongoing tension throughout each run.",
+  "acceptance_criteria": [
+    "Oxygen decreases by 1 unit per turn. The player starts each run with 100 O2.",
+    "Given the player's oxygen reaches 0, when a turn passes, then the player takes 5 HP damage per turn (suffocation).",
+    "Power cell decreases when using powered equipment (flashlight, powered weapons, hacking). The player starts with 100 power.",
+    "Given power cell reaches 0, when the player attempts to use powered equipment, then the action fails and a 'no power' message appears.",
+    "Suit integrity decreases from combat damage and environmental hazards (fire, acid). The player starts with 100 suit.",
+    "Given suit integrity reaches 0, when the player enters a hazardous room (toxic, vacuum), then they take double environmental damage.",
+    "Resource bars are displayed in the HUD panel and update in real-time after each turn.",
+    "O2 canisters, power cells, and repair kits can be picked up to restore resources."
+  ],
+  "status": "not-started",
+  "priority": "critical",
+  "estimate": 3,
+  "dependencies": ["STORY-0002"],
+  "linked_issues": [],
+  "spec_section": "5.5 Resource Management",
+  "source_file": "docs/game-spec.md",
+  "notes": "Spec table defines 4 resources but inventory space is handled in the equipment story. Start with O2/Power/Suit for MVP. Exact depletion rates are tunable — start with these defaults and balance via playtesting.",
+  "created_at": "2026-03-16T18:00:00Z",
+  "updated_at": null
+}
