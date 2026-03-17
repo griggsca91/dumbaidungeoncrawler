@@ -12,6 +12,18 @@
 export const ITEM_CATALOG = [
   // ── HEAD ──────────────────────────────────────────────────────────────
   {
+    id: 'helmet_sealed',
+    name: 'Sealed Helmet',
+    slot: 'head',
+    rarity: 'common',
+    description: 'Fully sealed against vacuum and toxic atmospheres.',
+    durability: 35, maxDurability: 35,
+    armorValue: 2,
+    vacuumProtection: true,
+    visionBonus: 0,
+    powerDraw: 0,
+  },
+  {
     id: 'helmet_basic',
     name: 'EVA Helmet',
     slot: 'head',
@@ -327,6 +339,25 @@ export const ITEM_CATALOG = [
     description: 'Restores 25 suit integrity.',
     durability: 1, maxDurability: 1,
     restores: { type: 'suitIntegrity', amount: 25 },
+  },
+  {
+    id: 'consumable_medkit',
+    name: 'Med Kit',
+    slot: 'consumable',
+    rarity: 'uncommon',
+    description: 'Emergency field medicine. Restores 30 HP.',
+    durability: 1, maxDurability: 1,
+    restores: { type: 'hp', amount: 30 },
+  },
+  {
+    id: 'consumable_stims',
+    name: 'Combat Stims',
+    slot: 'consumable',
+    rarity: 'rare',
+    description: 'Adrenaline shot. Restores 15 HP and 20 power.',
+    durability: 1, maxDurability: 1,
+    restores: { type: 'hp', amount: 15 },
+    restoresAlso: { type: 'power', amount: 20 },
   },
 ];
 

@@ -34,9 +34,19 @@ const BASE_INVENTORY_SLOTS = 8;
  */
 export function pickupItem(player, item, gameState) {
   // Consumables: use immediately
-  if (item.slot === 'consumable' && item.restores) {
-    restoreResource(gameState.resources, item.restores.type, item.restores.amount, gameState);
-    return true;
+  if (item.slot === 'consumable') {
+    if (item.restores) {
+      if (item.restores.type === 'hp') {
+        player.hp = Math.min(player.maxHp, player.hp + item.restores.amount);
+        addMessage(gameState, `HP restored (+${item.restores.amount}).`, 'system');
+      } else {
+        restoreResource(gameState.resources, item.restores.type, item.restores.amount, gameState);
+      }
+    }
+    if (item.restoresAlso) {
+      restoreResource(gameState.resources, item.restoresAlso.type, item.restoresAlso.amount, gameState);
+    }
+    if (item.restores || item.restoresAlso) return true;
   }
 
   // Try to auto-equip into an empty slot
