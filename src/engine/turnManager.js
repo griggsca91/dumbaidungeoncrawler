@@ -73,5 +73,10 @@ export function createTurnManager() {
       phase = PHASES.AWAITING_INPUT;
       turnCount = 0;
     },
+
+    /** Save/load support: advance internal counter without running game logic. */
+    _advanceTurn() {
+      turnCount++;
+    },
   };
 }

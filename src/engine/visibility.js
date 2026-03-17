@@ -154,5 +154,14 @@ export function createVisibility(mapWidth, mapHeight) {
       state.fill(VIS.UNSEEN);
       currentVisible = new Set();
     },
+
+    /** Save/load support: expose raw state array. */
+    _getStateArray() { return state; },
+
+    /** Save/load support: restore raw state array. */
+    _restoreStateArray(arr) {
+      const len = Math.min(arr.length, state.length);
+      for (let i = 0; i < len; i++) state[i] = arr[i];
+    },
   };
 }

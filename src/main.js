@@ -21,6 +21,7 @@ import { tickWarden, clearAlertCache } from './game/warden.js';
 import { updateParticles, renderParticles } from './engine/particles.js';
 import { handleDeath, startNewRun, loadStash, isAtStashZone } from './game/runManager.js';
 import { drawStashScreen, handleStashInput, openStash } from './ui/stash.js';
+import { saveGame, deleteSave } from './infra/saveLoad.js';
 
 // ── Initialize ────────────────────────────────────────────────────────────
 
@@ -161,6 +162,10 @@ function update(dt) {
 
     if (state.player.hp <= 0 && state.phase !== 'gameover') {
       handleDeath(state);
+      deleteSave();  // Death deletes the save; stash is preserved separately
+    } else {
+      // Auto-save after each turn (lightweight — only on playing state)
+      saveGame(state, visibility);
     }
 
     state.camera.x = state.player.x;
@@ -313,6 +318,14 @@ function drawHpBar(ctx, x, y, width, hp, maxHp, color) {
 }
 
 // (HUD rendering delegated to src/ui/hud.js)
+
+// ── Save on unload ────────────────────────────────────────────────────────
+
+window.addEventListener('beforeunload', () => {
+  if (state.phase === 'playing') {
+    saveGame(state, visibility);
+  }
+});
 
 // ── Start ─────────────────────────────────────────────────────────────────
 
