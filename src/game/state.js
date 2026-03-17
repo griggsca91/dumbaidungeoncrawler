@@ -51,6 +51,9 @@ export function createGameState() {
       { text: 'WASD: move | G: pickup | E: interact | Space: wait', type: 'system', turn: 0 },
     ],
 
+    /** Destructible object HP map: "x,y" -> { hp, maxHp } */
+    destructibleState: {},
+
     /** Current turn count. */
     turn: 0,
 

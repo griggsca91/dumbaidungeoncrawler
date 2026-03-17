@@ -14,6 +14,7 @@ import { createVisibility } from './engine/visibility.js';
 import { createGameState } from './game/state.js';
 import { executePlayerAction } from './game/player.js';
 import { tickResources, getResourceColor } from './game/resources.js';
+import { getCoverType } from './game/cover.js';
 
 // --- Initialize ---
 const { canvas, ctx } = initCanvas('game');
@@ -88,6 +89,9 @@ function render() {
   renderer.drawLayer(tileMap, LAYERS.WALLS, state.camera);
   renderer.drawLayer(tileMap, LAYERS.OBJECTS, state.camera);
 
+  // Cover indicators on tiles adjacent to enemies
+  drawCoverIndicators(ctx, offset);
+
   // Items on floor
   for (const entry of state.itemsOnFloor) {
     drawFloorItem(ctx, entry, offset);
@@ -158,6 +162,21 @@ function drawEntity(ctx, entity, offset, color) {
 
   // HP bar
   drawHpBar(ctx, x, y - 6, TILE_SIZE, entity.hp, entity.maxHp, color);
+}
+
+function drawCoverIndicators(ctx, offset) {
+  // For each alive enemy, show cover the player has against it
+  const p = state.player;
+  for (const enemy of state.entities) {
+    if (!enemy.alive) continue;
+    const coverType = getCoverType(enemy.x, enemy.y, p.x, p.y, tileMap);
+    if (coverType === 'none') continue;
+
+    const { x, y } = gridToScreen(p.x, p.y, offset);
+    // Small shield icon tint on player tile
+    ctx.fillStyle = coverType === 'full' ? 'rgba(46, 204, 113, 0.25)' : 'rgba(243, 156, 18, 0.2)';
+    ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+  }
 }
 
 function drawFloorItem(ctx, entry, offset) {

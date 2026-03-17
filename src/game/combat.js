@@ -5,6 +5,7 @@
  */
 
 import { hasLineOfSight } from './los.js';
+import { getCoverModifier, damageDestructible } from './cover.js';
 
 /** Base melee hit chance (no modifiers). */
 const BASE_MELEE_HIT_CHANCE = 0.85;
@@ -48,13 +49,14 @@ export function calculateHitChance(attacker, target, isMelee, coverModifier = 0)
 
 /**
  * Attempt a melee attack from attacker to target.
+ * Melee ignores cover (you're in their face).
  * @param {object} attacker - The attacking entity.
  * @param {object} target - The target entity.
  * @param {object} gameState - Full game state for logging.
  * @returns {{ hit: boolean, damage: number, killed: boolean }}
  */
 export function meleeAttack(attacker, target, gameState) {
-  const hitChance = calculateHitChance(attacker, target, true);
+  const hitChance = calculateHitChance(attacker, target, true, 0);
   const hit = Math.random() < hitChance;
 
   if (!hit) {
@@ -96,9 +98,15 @@ export function rangedAttack(attacker, target, coverModifier, gameState) {
   }
 
   // Consume ammo
-  weapon.ammo--;
+  if (weapon.id !== 'weapon_energy') weapon.ammo--;
 
-  const hitChance = calculateHitChance(attacker, target, false, coverModifier);
+  // Auto-calculate cover from game state if not provided
+  let effectiveCover = coverModifier;
+  if (effectiveCover === 0 && gameState.tileMap) {
+    effectiveCover = getCoverModifier(attacker.x, attacker.y, target.x, target.y, gameState.tileMap);
+  }
+
+  const hitChance = calculateHitChance(attacker, target, false, effectiveCover);
   const hit = Math.random() < hitChance;
 
   if (!hit) {
